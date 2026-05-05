@@ -1482,6 +1482,963 @@ hr.divider {
 </div>
 
 
+<!-- ════════ 08 QUESTION-LEVEL DEEP DIVE ════════ -->
+<style>
+/* ── Question Deep Dive Styles ── */
+.qdiv-section { background: var(--white); max-width: 1120px; margin: 0 auto; padding: 72px 64px; }
+.qdiv-filters {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 36px;
+}
+.qdiv-filter-btn {
+  padding: 7px 16px; border-radius: 20px; font-size: 12px; font-weight: 600;
+  cursor: pointer; border: 1px solid var(--border); background: var(--surface);
+  color: var(--muted); transition: all 0.15s;
+}
+.qdiv-filter-btn:hover, .qdiv-filter-btn.active { background: var(--navy); color: white; border-color: var(--navy); }
+.qdiv-filter-btn.active-lang { background: var(--lang); color: white; border-color: var(--lang); }
+.qdiv-filter-btn.active-math { background: var(--math); color: white; border-color: var(--math); }
+
+.qcard {
+  border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+  margin-bottom: 24px; background: var(--white);
+  transition: box-shadow 0.2s;
+}
+.qcard:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.07); }
+
+.qcard-header {
+  padding: 18px 24px; display: flex; align-items: flex-start;
+  gap: 16px; border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+.qcard-meta { flex: 1; }
+.qcard-tags { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+.qcard-question { font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.5; }
+.qcard-verdict {
+  display: flex; flex-direction: column; align-items: flex-end; gap: 6px;
+  flex-shrink: 0; min-width: 90px;
+}
+.verdict-winner {
+  font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  padding: 4px 12px; border-radius: 20px;
+}
+.vw-1 { background: var(--opt1); color: white; }
+.vw-2 { background: var(--opt2); color: white; }
+.vw-t { background: var(--surface); color: var(--muted); border: 1px solid var(--border); }
+.vote-score { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700; color: var(--ink); }
+.vote-score span { font-size: 11px; color: var(--muted); font-weight: 400; }
+
+.qcard-body { display: grid; grid-template-columns: 1fr 1fr; }
+
+.qopt {
+  padding: 20px 24px;
+  border-right: 1px solid var(--border);
+}
+.qopt:last-child { border-right: none; }
+
+.qopt-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px;
+}
+.qopt-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; font-family: 'JetBrains Mono', monospace;
+}
+.ol-1 { color: var(--opt1); }
+.ol-2 { color: var(--opt2); }
+.qopt-votes {
+  font-family: 'EB Garamond', serif; font-size: 28px;
+  font-weight: 700; line-height: 1;
+}
+.ov-1 { color: var(--opt1); }
+.ov-2 { color: var(--opt2); }
+
+.qvote-bar {
+  height: 5px; border-radius: 3px; margin-bottom: 14px;
+  width: 100%; background: var(--border);
+}
+.qvb-fill-1 { height: 100%; border-radius: 3px; background: var(--opt1); }
+.qvb-fill-2 { height: 100%; border-radius: 3px; background: var(--opt2); }
+
+.qresponse-box {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 4px; padding: 12px 14px; margin-bottom: 12px;
+  font-size: 12px; color: var(--body); line-height: 1.65;
+  max-height: 130px; overflow: hidden; position: relative;
+}
+.qresponse-box::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 28px;
+  background: linear-gradient(transparent, var(--surface));
+}
+.qresponse-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 1px;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
+}
+
+.qanalysis-box {
+  border-radius: 4px; padding: 12px 14px;
+  font-size: 12.5px; line-height: 1.65;
+}
+.qa-win { background: rgba(26,92,56,0.06); border-left: 3px solid var(--opt1); }
+.qa-lose { background: rgba(155,28,28,0.05); border-left: 3px solid var(--opt2); }
+.qa-tie { background: var(--gold-bg); border-left: 3px solid var(--gold); }
+
+.qa-win p { color: #0f3d22; }
+.qa-lose p { color: #5c1010; }
+.qa-tie p { color: #78350f; }
+.qa-title {
+  font-size: 10px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; margin-bottom: 6px;
+}
+.qa-win .qa-title { color: var(--opt1); }
+.qa-lose .qa-title { color: var(--opt2); }
+.qa-tie .qa-title { color: var(--gold); }
+
+.qcard-footer {
+  padding: 14px 24px; border-top: 1px solid var(--border);
+  background: linear-gradient(to right, rgba(26,92,56,0.03), rgba(155,28,28,0.03));
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.qf-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.qf-text { font-size: 12.5px; color: var(--body); line-height: 1.6; }
+.qf-text strong { color: var(--ink); }
+
+.qcard[data-subject="Language"] { border-left: 3px solid var(--lang); }
+.qcard[data-subject="Maths"] { border-left: 3px solid var(--math); }
+
+.hidden { display: none !important; }
+
+/* count pill */
+.count-summary {
+  display: flex; gap: 16px; margin-bottom: 28px;
+  font-size: 13px; color: var(--muted);
+}
+.cs-item { display: flex; align-items: center; gap: 6px; }
+.cs-dot { width: 10px; height: 10px; border-radius: 50%; }
+</style>
+
+<div style="background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+<div class="qdiv-section">
+  <div class="section-tag">08 — Question-Level Deep Dive</div>
+  <h2 class="sh">Why each option won — response structure, template &amp; tone analysis</h2>
+  <p class="subhead">All 16 unique question pairings, showing both responses, vote counts, and a structured analysis of <em>why</em> instructors preferred one over the other — based on response structure, scaffolding depth, actionability, and language style.</p>
+
+  <div class="qdiv-filters">
+    <button class="qdiv-filter-btn active" onclick="filterQ('all', this)">All Questions (16)</button>
+    <button class="qdiv-filter-btn" onclick="filterQ('Language', this)">Language (9)</button>
+    <button class="qdiv-filter-btn" onclick="filterQ('Maths', this)">Maths (7)</button>
+    <button class="qdiv-filter-btn" onclick="filterQ('opt1wins', this)">Option 1 Wins</button>
+    <button class="qdiv-filter-btn" onclick="filterQ('opt2wins', this)">Option 2 Wins</button>
+  </div>
+
+  <div class="count-summary">
+    <div class="cs-item"><div class="cs-dot" style="background:var(--opt1)"></div> Option 1 wins: 7 questions</div>
+    <div class="cs-item"><div class="cs-dot" style="background:var(--opt2)"></div> Option 2 wins: 8 questions</div>
+    <div class="cs-item"><div class="cs-dot" style="background:var(--gold)"></div> Tie: 1 question</div>
+  </div>
+
+  <!-- ── Q1: Activity Suggestion basis domain — Day 15 Story ── -->
+  <div class="qcard" data-subject="Language" data-winner="opt2">
+    <div class="qcard-header">
+      <div class="qcard-meta">
+        <div class="qcard-tags">
+          <span class="badge badge-lang">Language</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Activity Suggestion basis domain</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Day 15</span>
+        </div>
+        <div class="qcard-question">मैं day 15 पे हूँ, अब स्टोरी रिलेटेड क्या करना चाहिए? <em style="color:var(--muted);font-size:12px;font-weight:400;">(What story-related activity should I do on Day 15?)</em></div>
+      </div>
+      <div class="qcard-verdict">
+        <span class="verdict-winner vw-2">Option 2</span>
+        <div class="vote-score">5 <span>vs</span> 6</div>
+      </div>
+    </div>
+    <div class="qcard-body">
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-1">Option 1</span>
+          <span class="qopt-votes ov-1">5</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-1" style="width:45.5%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">Big Group → Small Groups breakdown with level tags (Word, Para, Story). Mentions role play, reading aloud, dialogues. Structured by group type. Uses headers.</div>
+        <div class="qanalysis-box qa-lose">
+          <div class="qa-title">Why it got fewer votes</div>
+          <p>Organises activities by group segment which creates complexity for a simple "what to do" query. The level-wise structure (Beginner/Letter/Word/Para/Story) demands the teacher hold multiple threads simultaneously — more cognitive load. Day 15 context is a broad planning question; instructors wanted a quick, flowing sequence, not a grouped matrix.</p>
+        </div>
+      </div>
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-2">Option 2</span>
+          <span class="qopt-votes ov-2">6</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-2" style="width:54.5%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">Opens with affirmation. Lists 3 numbered activities sequentially (drama/role-play, deep questions, mind map / story retelling). No group segmentation. Conversational and flowing tone.</div>
+        <div class="qanalysis-box qa-win">
+          <div class="qa-title">Why it won</div>
+          <p>Reads like a teacher's natural session flow — do this, then this, then this. The three numbered activities are immediately actionable without mental translation. "नाटक रूप में करवाएँ", "गहरे सवाल पूछें", "Mind Map" are concrete verbs. No segmentation means less planning overhead for the teacher.</p>
+        </div>
+      </div>
+    </div>
+    <div class="qcard-footer">
+      <div class="qf-icon">💡</div>
+      <div class="qf-text"><strong>Key insight:</strong> For broad "what to do today" questions, a <strong>sequential numbered flow</strong> beats a structured group matrix. Teachers on Day 15 need a running order, not an org chart. Option 1's structure is valuable for differentiated tasks, not for whole-session planning queries.</div>
+    </div>
+  </div>
+
+  <!-- ── Q2: Activity Suggestion basis domain — Day 20 Phonological ── -->
+  <div class="qcard" data-subject="Language" data-winner="opt2">
+    <div class="qcard-header">
+      <div class="qcard-meta">
+        <div class="qcard-tags">
+          <span class="badge badge-lang">Language</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Activity Suggestion basis domain</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Day 20 · Phonological</span>
+        </div>
+        <div class="qcard-question">मैं day 20 पे हूँ, अब फोनोलॉजिकल मैं क्या करना चाहिए? <em style="color:var(--muted);font-size:12px;font-weight:400;">(What phonological activity on Day 20?)</em></div>
+      </div>
+      <div class="qcard-verdict">
+        <span class="verdict-winner vw-2">Option 2</span>
+        <div class="vote-score">2 <span>vs</span> 6</div>
+      </div>
+    </div>
+    <div class="qcard-body">
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-1">Option 1</span>
+          <span class="qopt-votes ov-1">2</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-1" style="width:25%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">Splits into Big Group and Small Groups. Big group: new matra column (barahkhadi). Small groups: word-level finds words, para/story does "Find My Word" activity. Structured but verbose per section.</div>
+        <div class="qanalysis-box qa-lose">
+          <div class="qa-title">Why it got fewer votes</div>
+          <p>Prescribes barahkhadi drill for the big group — but by Day 20, children at paragraph/story level don't need basic matra repetition. Instructors likely found this misaligned with the late-camp context. The group-split structure also added complexity for a phonological focus question where a crisp activity list suffices.</p>
+        </div>
+      </div>
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-2">Option 2</span>
+          <span class="qopt-votes ov-2">6</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-2" style="width:75%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">Opens with level-appropriate framing ("Day 20 — children are at para/story level — go deeper"). Lists 4 numbered tasks: complex word breaking, sound identification, varn mel game, writing with self-correction.</div>
+        <div class="qanalysis-box qa-win">
+          <div class="qa-title">Why it won</div>
+          <p>Correctly reads the Day 20 context — children are advanced, activities should challenge them. No barahkhadi repetition. The 4 activities are concise, action-verb-led (बनवाएँ, बोलें, लिखवाएँ), and appropriate for late-camp proficiency. Zero group-splitting reduces teacher cognitive load for a short phonological block.</p>
+        </div>
+      </div>
+    </div>
+    <div class="qcard-footer">
+      <div class="qf-icon">💡</div>
+      <div class="qf-text"><strong>Key insight:</strong> <strong>Camp-day context awareness</strong> was decisive here. Option 1 prescribed early-camp activities (barahkhadi drill) for a Day 20 question — a contextual mismatch that instructors immediately flagged. Option 2's response correctly elevated the challenge level. <em>The format mattered less than the context-fit of the content.</em></div>
+    </div>
+  </div>
+
+  <!-- ── Q3: Activity Suggestion domain+level — Beginner/Letter/Word story ── -->
+  <div class="qcard" data-subject="Language" data-winner="opt1">
+    <div class="qcard-header">
+      <div class="qcard-meta">
+        <div class="qcard-tags">
+          <span class="badge badge-lang">Language</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Activity Suggestion domain+level</span>
+        </div>
+        <div class="qcard-question">बिगिनर, लेटर और वर्ड लेवल के बच्चों के साथ कहानी में क्या करें? <em style="color:var(--muted);font-size:12px;font-weight:400;">(What to do with beginner/letter/word-level children in story activity?)</em></div>
+      </div>
+      <div class="qcard-verdict">
+        <span class="verdict-winner vw-1">Option 1</span>
+        <div class="vote-score">5 <span>vs</span> 1</div>
+      </div>
+    </div>
+    <div class="qcard-body">
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-1">Option 1</span>
+          <span class="qopt-votes ov-1">5</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-1" style="width:83.3%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">Opens with empathy ("यह बहुत ध्यान देने वाली बात है"). Distinct task per level — Beginner: picture search/circle; Letter: peer-leader system + word hunt; Word: independent paragraph read + sentence formation. Ends with pedagogical principle about second-day story recall.</div>
+        <div class="qanalysis-box qa-win">
+          <div class="qa-title">Why it won</div>
+          <p>The question explicitly asks about three specific learner levels — and Option 1 answers with three genuinely distinct activities per level. This is the exact use case where structure excels: when the teacher's question is inherently differentiated. The peer-leader mechanism for Letter level is a novel, actionable idea not in Option 2. The closing principle adds value without cluttering the actions.</p>
+        </div>
+      </div>
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-2">Option 2</span>
+          <span class="qopt-votes ov-2">1</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-2" style="width:16.7%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">3 generic activities: slow story retelling, flashcard word extraction, picture sequencing. Does not differentiate by learner level. Says "small group mein pratyek bacche ko ek shabd" — applies same task to all.</div>
+        <div class="qanalysis-box qa-lose">
+          <div class="qa-title">Why it got fewer votes</div>
+          <p>The teacher asked specifically about three distinct learner levels. Option 2 provides one-size activities that don't differentiate. A beginner and a word-level child would receive the same flashcard/sequencing task — this misses the pedagogical point entirely. Generic structure is a misfit when the question demands differentiated answers.</p>
+        </div>
+      </div>
+    </div>
+    <div class="qcard-footer">
+      <div class="qf-icon">💡</div>
+      <div class="qf-text"><strong>Key insight:</strong> When the teacher's question <strong>explicitly names learner levels</strong>, Option 1's structured, level-differentiated format wins decisively. The structure isn't overhead — it <em>is</em> the answer. Option 2's simplicity becomes a liability when differentiation is the core requirement.</div>
+    </div>
+  </div>
+
+  <!-- ── Q4: Activity Suggestion domain+level — Oral Discussion Day 12 ── -->
+  <div class="qcard" data-subject="Language" data-winner="opt2">
+    <div class="qcard-header">
+      <div class="qcard-meta">
+        <div class="qcard-tags">
+          <span class="badge badge-lang">Language</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Activity Suggestion domain+level</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Day 12 · Oral Discussion</span>
+        </div>
+        <div class="qcard-question">मेरी क्लास में अलग-अलग लेवल के बच्चे हैं और आज 12वां दिन है। मैं लैंगुएज में कौन-सी ओरल डिस्कशन करूँ? <em style="color:var(--muted);font-size:12px;font-weight:400;">(Oral discussion activity for mixed-level class on Day 12?)</em></div>
+      </div>
+      <div class="qcard-verdict">
+        <span class="verdict-winner vw-2">Option 2</span>
+        <div class="vote-score">3 <span>vs</span> 4</div>
+      </div>
+    </div>
+    <div class="qcard-body">
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-1">Option 1</span>
+          <span class="qopt-votes ov-1">3</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-1" style="width:42.9%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">"Continue the Story" oral chain — all levels participate together. Beginner/Letter: small sentences ("फिर..."); Word: logical links ("क्योंकि..."); Para/Story: add new plot twists. Inclusive design where all levels contribute in one activity.</div>
+        <div class="qanalysis-box qa-lose">
+          <div class="qa-title">Why it got fewer votes</div>
+          <p>The "Continue the Story" chain is creative but unfamiliar — requires the teacher to manage a novel activity format while tracking which level each child is contributing at. Day 12 is relatively early in the camp. For a standard oral discussion query, a complex collaborative format may feel like more work than the teacher bargained for.</p>
+        </div>
+      </div>
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-2">Option 2</span>
+          <span class="qopt-votes ov-2">4</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-2" style="width:57.1%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">Big group: choose a familiar everyday topic (school, food, routine). Small group: picture cards → simple questions → progressively deeper questions. Closing: "remember to give thinking time." Conversational flow, big-to-small structure.</div>
+        <div class="qanalysis-box qa-win">
+          <div class="qa-title">Why it won</div>
+          <p>Mirrors the standard TaRL lesson flow (big group → small group) which teachers know by heart. The picture-card scaffold is familiar and low-prep. Progressive questioning (simple → deep) is explicitly named — teachers can follow this without memorising a new activity format. "Thinking time" is a practical reminder that adds real value.</p>
+        </div>
+      </div>
+    </div>
+    <div class="qcard-footer">
+      <div class="qf-icon">💡</div>
+      <div class="qf-text"><strong>Key insight:</strong> When the question implies a <strong>standard session activity</strong> (not explicit differentiation), instructors prefer responses that <strong>mirror their familiar lesson flow</strong>. Novel formats (story chain) feel risky when a teacher is mid-camp. Option 2 wins by working within known structures, not around them.</div>
+    </div>
+  </div>
+
+  <!-- ── Q5: Activity Suggestion domain+level — 20 Story-level children, phonological ── -->
+  <div class="qcard" data-subject="Language" data-winner="opt1">
+    <div class="qcard-header">
+      <div class="qcard-meta">
+        <div class="qcard-tags">
+          <span class="badge badge-lang">Language</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Activity Suggestion domain+level</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Story-level · Phonological</span>
+        </div>
+        <div class="qcard-question">मेरे 20 बच्चे कहानी स्तर पर हैं! उनको ध्वनि संबंधित गतिविधि के समय क्या टास्क दूं? <em style="color:var(--muted);font-size:12px;font-weight:400;">(Task for 20 story-level children during phonological activity?)</em></div>
+      </div>
+      <div class="qcard-verdict">
+        <span class="verdict-winner vw-1">Option 1</span>
+        <div class="vote-score">5 <span>vs</span> 1</div>
+      </div>
+    </div>
+    <div class="qcard-body">
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-1">Option 1</span>
+          <span class="qopt-votes ov-1">5</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-1" style="width:83.3%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">Opens with affirmation + framing ("these children are beyond basic phonological awareness"). 3 activities: "Find My Word" (matra-based word hunt + sentence writing), word-category game (animal/verb/emotion) + story writing, predictive activities instead of barahkhadi. Closes with principle: "focus on usage, not repetition."</div>
+        <div class="qanalysis-box qa-win">
+          <div class="qa-title">Why it won</div>
+          <p>The pedagogical framing ("ये बुनियादी ध्वनि-सजागता से आगे निकल चुके हैं") immediately validates the teacher's context. Activities are level-appropriate — no barahkhadi drill. The closing principle ("ध्वनि दोहराव नहीं — शब्द के रूप में उपयोग") gives the teacher a mental model for future decisions, not just today's task. This is principled guidance that earns its length.</p>
+        </div>
+      </div>
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-2">Option 2</span>
+          <span class="qopt-votes ov-2">1</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-2" style="width:16.7%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">3 tasks: advanced toro-joro (syllable breaking in reverse), word-game (10 words starting with "स"), instant story writing from 3-4 words. Ends with "they need creative work."</div>
+        <div class="qanalysis-box qa-lose">
+          <div class="qa-title">Why it got fewer votes</div>
+          <p>Activities are valid but delivered without context or framing. "उन्नत तोड़ो-जोड़ो" (reverse syllable assembly) is intellectually interesting but lacks execution guidance. The "instant story writing" suggestion at the end of a phonological block is creative but feels disconnected. The response reads like a list without a coherent pedagogical thread connecting the three tasks.</p>
+        </div>
+      </div>
+    </div>
+    <div class="qcard-footer">
+      <div class="qf-icon">💡</div>
+      <div class="qf-text"><strong>Key insight:</strong> For <strong>single-level, high-proficiency questions</strong>, Option 1's principled framing adds genuine value — it tells the teacher <em>why</em> these activities suit advanced learners, not just what to do. A closing mental model ("use words in context, don't repeat sounds") is more durable than an activity list alone.</div>
+    </div>
+  </div>
+
+  <!-- ── Q6: Content by domain — Independent writing topic Day 10 ── -->
+  <div class="qcard" data-subject="Language" data-winner="opt2">
+    <div class="qcard-header">
+      <div class="qcard-meta">
+        <div class="qcard-tags">
+          <span class="badge badge-lang">Language</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Content by domain</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Day 10 · Independent Writing</span>
+        </div>
+        <div class="qcard-question">Day 10 पे बच्चों से इंडिपेंडेंट राइटिंग करवानी है, तो कौन-सा टॉपिक लूँ? <em style="color:var(--muted);font-size:12px;font-weight:400;">(Which topic to choose for independent writing on Day 10?)</em></div>
+      </div>
+      <div class="qcard-verdict">
+        <span class="verdict-winner vw-2">Option 2</span>
+        <div class="vote-score">1 <span>vs</span> 4</div>
+      </div>
+    </div>
+    <div class="qcard-body">
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-1">Option 1</span>
+          <span class="qopt-votes ov-1">1</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-1" style="width:20%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">Recommends "मेरा सबसे अच्छा दिन" (My best day) or "मेरे घर में क्या-क्या है" (What's at home). Then provides a 4-step process: discuss → mind map on board → write → read aloud. Differentiates Para (4-5 sentences) vs Story level (full story with beginning-middle-end).</div>
+        <div class="qanalysis-box qa-lose">
+          <div class="qa-title">Why it got fewer votes</div>
+          <p>Provides only 1–2 topic options before launching into process. The teacher asked "which topic" — a content question. Option 1 answers with process (how to run it), which is useful but secondary. The mind-map step adds prep burden on Day 10 when teachers may prefer lighter activities. Level differentiation at the end feels appended rather than integrated.</p>
+        </div>
+      </div>
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-2">Option 2</span>
+          <span class="qopt-votes ov-2">4</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-2" style="width:80%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">Offers 3 distinct topic options with rationale for each: (1) continue previous story with alternate ending, (2) familiar experience (favourite day / funny school incident), (3) picture-based writing. Closes with simple process: 5 min discussion → 10-12 min writing → read aloud.</div>
+        <div class="qanalysis-box qa-win">
+          <div class="qa-title">Why it won</div>
+          <p>Directly answers the question: gives 3 concrete topic options with explicit rationale ("बच्चों को पहले से ही पात्र और संदर्भ ज्ञात होंगे"). The teacher can pick one and go — low decision cost. The process is brief (5+10+share) and low-prep. Option 2 answered the question asked; Option 1 answered a broader question the teacher didn't ask.</p>
+        </div>
+      </div>
+    </div>
+    <div class="qcard-footer">
+      <div class="qf-icon">💡</div>
+      <div class="qf-text"><strong>Key insight:</strong> <strong>Answer the question asked</strong> — not a related, broader one. The teacher asked for a topic, not a process. Option 2 wins by giving 3 options with rationale. Option 1 loses by pivoting to process before the content question is fully resolved. <em>Breadth of answer ≠ quality of answer.</em></div>
+    </div>
+  </div>
+
+  <!-- ── Q7: Content by level — Subtraction questions for digit-recognition children ── -->
+  <div class="qcard" data-subject="Language" data-winner="opt1">
+    <div class="qcard-header">
+      <div class="qcard-meta">
+        <div class="qcard-tags">
+          <span class="badge badge-lang">Language</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Content by level</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Subtraction · Digit-recognition</span>
+        </div>
+        <div class="qcard-question">मेरे 8 बच्चों को डिजिट की पहचान है। उनके लिए घटाने के 5–6 आसान सवाल दीजिए। <em style="color:var(--muted);font-size:12px;font-weight:400;">(Give 5–6 easy subtraction problems for 8 digit-recognition children)</em></div>
+      </div>
+      <div class="qcard-verdict">
+        <span class="verdict-winner vw-1">Option 1</span>
+        <div class="vote-score">3 <span>vs</span> 2</div>
+      </div>
+    </div>
+    <div class="qcard-body">
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-1">Option 1</span>
+          <span class="qopt-votes ov-1">3</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-1" style="width:60%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">6 problems with labels showing difficulty ramp: 25-12 (mala/bead game), 34-10 (easy: remove tens), 42-11, 38-14 (slightly harder), 50-20 (round numbers), 29-15 (practical: ₹29 spent). Each problem has a parenthetical note explaining pedagogical fit. Suggests tilli or word-problem framing.</div>
+        <div class="qanalysis-box qa-win">
+          <div class="qa-title">Why it won</div>
+          <p>Each problem comes with a note explaining why it's appropriate at that difficulty — "(सरल: दहाई निकालना)" and "(गोल संख्याएँ आसान हैं)" tell the teacher the pedagogical logic, not just the number. The progression is visible (25-12 → 50-20 → 29-15). The suggestion to connect to real context (₹29) shows the principle being applied. It's a resource with a teaching rationale built in.</p>
+        </div>
+      </div>
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-2">Option 2</span>
+          <span class="qopt-votes ov-2">2</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-2" style="width:40%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">6 clean problems (15-3, 18-5, 20-10, 25-4, 30-8, 22-6) with no labels or difficulty ramp indication. Ends with a tilli-bundle suggestion and recommendation to increase difficulty next day.</div>
+        <div class="qanalysis-box qa-lose">
+          <div class="qa-title">Why it got fewer votes</div>
+          <p>Problems are simpler (all single-digit subtrahends, max 30-8) — arguably too easy for digit-recognition children who may have some number sense. No rationale per problem means the teacher can't understand why this progression was chosen. Clean format is a strength, but lacks the pedagogical scaffolding that helps a teacher adapt on the fly.</p>
+        </div>
+      </div>
+    </div>
+    <div class="qcard-footer">
+      <div class="qf-icon">💡</div>
+      <div class="qf-text"><strong>Key insight:</strong> When providing <strong>content items (problems, examples, topics)</strong>, annotating each item with its pedagogical purpose wins over a clean unannotated list. Teachers use the annotations to understand the progression — making it reusable, not just consumable for today.</div>
+    </div>
+  </div>
+
+  <!-- ── Q8: Lesson Planning — Day 20 Language ── -->
+  <div class="qcard" data-subject="Language" data-winner="opt2">
+    <div class="qcard-header">
+      <div class="qcard-meta">
+        <div class="qcard-tags">
+          <span class="badge badge-lang">Language</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Lesson Planning</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Day 20</span>
+        </div>
+        <div class="qcard-question">मैं day 20 पे हूँ, अब भाषा मैं क्या करना चाहिए? <em style="color:var(--muted);font-size:12px;font-weight:400;">(What should I do in Language on Day 20?)</em></div>
+      </div>
+      <div class="qcard-verdict">
+        <span class="verdict-winner vw-2">Option 2</span>
+        <div class="vote-score">2 <span>vs</span> 5</div>
+      </div>
+    </div>
+    <div class="qcard-body">
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-1">Option 1</span>
+          <span class="qopt-votes ov-1">2</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-1" style="width:28.6%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">Big Group → Small Groups format. Big: new story, ask opinion, finger tracking. Small: Para level = read + make 2-3 questions + ask other group; Story level = discuss character decisions + give feedback. Ends with Independent Writing or Mind Map.</div>
+        <div class="qanalysis-box qa-lose">
+          <div class="qa-title">Why it got fewer votes</div>
+          <p>The group-split structure for a "what to do today" question adds unnecessary complexity. Para and Story level tasks are both dense — the teacher must switch between facilitating group discussions AND managing feedback loops between groups. For a broad daily planning question on Day 20, this feels like too much to coordinate. The structure here is a planning overhead, not a planning shortcut.</p>
+        </div>
+      </div>
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-2">Option 2</span>
+          <span class="qopt-votes ov-2">5</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-2" style="width:71.4%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">4 numbered blocks with time allocations: (1) Story Discussion 20 min, (2) Role Play, (3) Independent Writing 10-15 min, (4) Barahkhadi game 10 min. Ends with a tip on hesitant readers. Clean, timed sequence.</div>
+        <div class="qanalysis-box qa-win">
+          <div class="qa-title">Why it won</div>
+          <p>A timed numbered list is a lesson plan — which is exactly what the teacher asked for. The 4 blocks map directly to a 60-minute session. Time allocations (20 min, 10-15 min, 10 min) allow the teacher to budget the period without additional planning. The single practical tip at the end (pair hesitant readers with a partner) is low-effort, high-impact. This format is immediately usable as a running order.</p>
+        </div>
+      </div>
+    </div>
+    <div class="qcard-footer">
+      <div class="qf-icon">💡</div>
+      <div class="qf-text"><strong>Key insight:</strong> Lesson planning questions need a <strong>timed lesson plan as output</strong> — not a group-activity matrix. Option 2 wins because it gives exactly what was asked: a sequenced, timed running order. When the implicit output format is a plan, structure the response as a plan.</div>
+    </div>
+  </div>
+
+  <!-- ── Q9: Story Activity / Engagement — Tie ── -->
+  <div class="qcard" data-subject="Language" data-winner="tie">
+    <div class="qcard-header">
+      <div class="qcard-meta">
+        <div class="qcard-tags">
+          <span class="badge badge-lang">Language</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Story Activity / Engagement</span>
+        </div>
+        <div class="qcard-question">मैं Story Activity को इस तरह कैसे चलाऊँ कि सभी बच्चे भाग लें? <em style="color:var(--muted);font-size:12px;font-weight:400;">(How to run Story Activity so all children participate?)</em></div>
+      </div>
+      <div class="qcard-verdict">
+        <span class="verdict-winner vw-t">Tie</span>
+        <div class="vote-score">4 <span>vs</span> 4</div>
+      </div>
+    </div>
+    <div class="qcard-body">
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-1">Option 1</span>
+          <span class="qopt-votes ov-1">4</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-1" style="width:50%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">Day 15-17 framing → Big Group (4-5 children read aloud, role-play preparation) → Small Groups by level (Beginner/Letter: peer leader + one simple line; Word: circle words + perform; Para: read with expression + write dialogues; Story: complex analysis + feedback to others).</div>
+        <div class="qanalysis-box qa-tie">
+          <div class="qa-title">Why it tied</div>
+          <p>Strong for teachers who want a fully mapped group structure with role-play built in. Level-wise role assignment is innovative. But requires pre-preparation (assigning roles, managing 4 different group flows). Useful for experienced TaRL teachers who are confident running parallel small groups.</p>
+        </div>
+      </div>
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-2">Option 2</span>
+          <span class="qopt-votes ov-2">4</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-2" style="width:50%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">Sequential flow: teacher reads with expression → picture/event discussion → simple questions for quieter children → slow re-read with finger tracking → small group level reading → character discussion for advanced children.</div>
+        <div class="qanalysis-box qa-tie">
+          <div class="qa-title">Why it tied</div>
+          <p>Progressive whole-class → small group format is familiar and low-prep. Specific tip for quieter children (start with simple picture questions, progress to opinion questions) is concrete and immediately applicable. No role assignments needed — the structure itself scaffolds participation. Suited for teachers who prefer guided whole-class approaches.</p>
+        </div>
+      </div>
+    </div>
+    <div class="qcard-footer">
+      <div class="qf-icon">💡</div>
+      <div class="qf-text"><strong>Key insight:</strong> The tie reflects a genuine pedagogical split — Option 1 suits structured, level-managed classrooms; Option 2 suits flowing whole-class-then-group approaches. Both are valid. The question ("all children participate") has multiple correct answers depending on classroom style. <em>Context within context: teacher pedagogy style determines the fit.</em></div>
+    </div>
+  </div>
+
+  <!-- ── Q10: Activity Suggestion by domain — Math Talk Day 20 ── -->
+  <div class="qcard" data-subject="Maths" data-winner="opt1">
+    <div class="qcard-header">
+      <div class="qcard-meta">
+        <div class="qcard-tags">
+          <span class="badge badge-math">Maths</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Activity Suggestion by domain</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Day 20 · Math Talk</span>
+        </div>
+        <div class="qcard-question">मैं day 20 पे हूँ. मैथ टॉक में क्या करना चाहिए? <em style="color:var(--muted);font-size:12px;font-weight:400;">(What to do in Math Talk on Day 20?)</em></div>
+      </div>
+      <div class="qcard-verdict">
+        <span class="verdict-winner vw-1">Option 1</span>
+        <div class="vote-score">8 <span>vs</span> 3</div>
+      </div>
+    </div>
+    <div class="qcard-body">
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-1">Option 1</span>
+          <span class="qopt-votes ov-1">8</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-1" style="width:72.7%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">Use a market/fair picture. 3-step process: (1) Estimate ("how many children?"), (2) Reason ("why do you think?"), (3) Extend ("if 10 more come?"). Then level-appropriate questions: 10-99 level = "add 10 to this"; Advanced = skip count from 24 by 5s. Closes: "10 mins, 1-2 pictures."</div>
+        <div class="qanalysis-box qa-win">
+          <div class="qa-title">Why it won (by largest margin in dataset)</div>
+          <p>Provides the complete Math Talk protocol in one structured sequence — Estimate → Reason → Extend. This is the TaRL Math Talk framework made explicit. Level-differentiated follow-up questions (10-99 vs advanced) are immediately actionable. The time constraint ("10 min, 1-2 pictures") is a critical operating parameter teachers need. This is a script, not advice — teachers can run it as-is without any adaptation.</p>
+        </div>
+      </div>
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-2">Option 2</span>
+          <span class="qopt-votes ov-2">3</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-2" style="width:27.3%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">Use a real picture. Let children estimate, reason, add. "Think first, then speak" — 30 seconds. Whole class, one picture. 10 min, 1-2 pictures. Listen to process, not just answers.</div>
+        <div class="qanalysis-box qa-lose">
+          <div class="qa-title">Why it got fewer votes</div>
+          <p>Contains the same core advice (estimate → reason → extend; 1-2 pictures; 10 min) but without the explicit 3-step protocol naming or the level-differentiated questions. The response describes Math Talk principles without giving the teacher a runnable script. A teacher who doesn't already know Math Talk well cannot distinguish what to do first vs second from this response alone.</p>
+        </div>
+      </div>
+    </div>
+    <div class="qcard-footer">
+      <div class="qf-icon">💡</div>
+      <div class="qf-text"><strong>Key insight:</strong> The <strong>largest win margin in the dataset (8 vs 3)</strong>. Option 1 wins because it provides a <strong>runnable protocol</strong> — the teacher can follow it step by step without translation. Named stages (Estimate → Reason → Extend) and level-split questions transform general advice into an executable classroom script. For domain-specific pedagogical activities, structured protocols beat narrative descriptions.</div>
+    </div>
+  </div>
+
+  <!-- ── Q11: Activity Suggestion domain+level — Mixed class, large group ── -->
+  <div class="qcard" data-subject="Maths" data-winner="opt2">
+    <div class="qcard-header">
+      <div class="qcard-meta">
+        <div class="qcard-tags">
+          <span class="badge badge-math">Maths</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Activity Suggestion domain+level</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Mixed class · Large group</span>
+        </div>
+        <div class="qcard-question">0-9 स्तर के 6, 10-99 के 6, जोड़ के 2, घटाव के 14 और शाब्दिक सवाल के 12 बच्चे — उनके लिए गतिविधि? <em style="color:var(--muted);font-size:12px;font-weight:400;">(Activity for a very mixed class: 5 different levels specified)</em></div>
+      </div>
+      <div class="qcard-verdict">
+        <span class="verdict-winner vw-2">Option 2</span>
+        <div class="vote-score">2 <span>vs</span> 3</div>
+      </div>
+    </div>
+    <div class="qcard-body">
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-1">Option 1</span>
+          <span class="qopt-votes ov-1">2</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-1" style="width:40%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">Big Group: board shows ascending/descending order. Small Groups: 0-9 = number cards + tilli-bundle; 10-99 = place value table; Addition+Subtraction (16 children) = expanded form (563 = 500+60+3). Individual support for 0-9.</div>
+        <div class="qanalysis-box qa-lose">
+          <div class="qa-title">Why it got fewer votes</div>
+          <p>Groups addition and subtraction children together (16 children) with the same expanded-form task — but these are different levels. The 563 expanded form example appears too advanced for children just beginning addition. The big-group ascending/descending activity doesn't connect well to the dominance of subtraction/word-problem children (26 out of 40). Feels misaligned to the classroom profile provided.</p>
+        </div>
+      </div>
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-2">Option 2</span>
+          <span class="qopt-votes ov-2">3</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-2" style="width:60%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">Acknowledges the strong subtraction/word-problem cohort ("घटाव और शाब्दिक सवालों पर बच्चों की संख्या बढ़ी — अच्छा संकेत!"). Tilli-bundle for ALL children as foundation → number chart games → everyone does the activity together, teacher circulates to help.</div>
+        <div class="qanalysis-box qa-win">
+          <div class="qa-title">Why it won</div>
+          <p>Opens by acknowledging the classroom profile — this signals the response is customised, not generic. Choosing tilli-bundle for ALL children is pedagogically smart when the class is this diverse: it works for 0-9 learners (counting) and subtraction learners (regrouping) simultaneously. A unified activity the teacher can run whole-class, then circulate, is far more manageable than parallel small-group streams for 5 different levels.</p>
+        </div>
+      </div>
+    </div>
+    <div class="qcard-footer">
+      <div class="qf-icon">💡</div>
+      <div class="qf-text"><strong>Key insight:</strong> When a class has <strong>5+ learner levels simultaneously</strong>, a unified high-leverage manipulative (tilli-bundle) that works for all levels beats parallel group-specific tasks. Option 2 wins by solving the teacher's real problem: how to manage extreme diversity without running 5 different activities. Sometimes simplification is the more sophisticated answer.</div>
+    </div>
+  </div>
+
+  <!-- ── Q12: Activity Suggestion domain+level — Day 18, Subtraction group small ── -->
+  <div class="qcard" data-subject="Maths" data-winner="opt2">
+    <div class="qcard-header">
+      <div class="qcard-meta">
+        <div class="qcard-tags">
+          <span class="badge badge-math">Maths</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Activity Suggestion domain+level</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Day 18 · Subtraction group</span>
+        </div>
+        <div class="qcard-question">संख्या संबंधित गतिविधि के समय छोटे ग्रुप में घटाव के बच्चों को क्या दूं, day 18 पे? <em style="color:var(--muted);font-size:12px;font-weight:400;">(What task for subtraction-level children in small group on Day 18?)</em></div>
+      </div>
+      <div class="qcard-verdict">
+        <span class="verdict-winner vw-2">Option 2</span>
+        <div class="vote-score">1 <span>vs</span> 5</div>
+      </div>
+    </div>
+    <div class="qcard-body">
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-1">Option 1</span>
+          <span class="qopt-votes ov-1">1</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-1" style="width:16.7%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">Links the subtraction small group to the big-group division activity — simplifies it ("54 apples among 6 children"). Then adds large-number subtraction (73-28, 85-47) and difference problems. Tilli-bundle execution included. Also adds multiplication-to-division bridge.</div>
+        <div class="qanalysis-box qa-lose">
+          <div class="qa-title">Why it got fewer votes</div>
+          <p>On Day 18, linking subtraction children to a division activity that's happening in big group is an unusual ask — it assumes the teacher is running division with other groups, which may not be the case. 85-47 is aggressive for a group just at subtraction level. The response tries to bridge too many levels simultaneously, creating confusion about what the subtraction group actually does independently.</p>
+        </div>
+      </div>
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-2">Option 2</span>
+          <span class="qopt-votes ov-2">5</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-2" style="width:83.3%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">Opens with context framing ("Day 18, post-Midline, mixed class, subtraction children get bored without tasks"). Gives real-life subtraction problems in 30-35 range. Tilli method steps shown. Then adds: place value decomposition, comparison problems, and written recording. Closes with next-step guidance.</div>
+        <div class="qanalysis-box qa-win">
+          <div class="qa-title">Why it won</div>
+          <p>Correctly frames the teacher's actual problem — subtraction-level children during big-group number activity have idle time, leading to disengagement. This diagnosis before the prescription shows deep contextual understanding. The 30-35 number range is calibrated (not too easy, not too hard for Day 18). The tilli execution steps are explicit. The progression (concrete → place value → written) is the correct pedagogical arc for this level.</p>
+        </div>
+      </div>
+    </div>
+    <div class="qcard-footer">
+      <div class="qf-icon">💡</div>
+      <div class="qf-text"><strong>Key insight:</strong> Option 2 wins by <strong>diagnosing the problem before prescribing</strong> ("subtraction children get bored during big-group number activity"). Responses that show they understand <em>why</em> the teacher is asking build more trust than responses that jump straight to solutions. Context diagnosis is itself a form of value-add.</div>
+    </div>
+  </div>
+
+  <!-- ── Q13: Activity Suggestion by level — Day 20, 10-99 subtraction ── -->
+  <div class="qcard" data-subject="Maths" data-winner="opt1">
+    <div class="qcard-header">
+      <div class="qcard-meta">
+        <div class="qcard-tags">
+          <span class="badge badge-math">Maths</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Activity Suggestion by level</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Day 20 · 10-99 Subtraction</span>
+        </div>
+        <div class="qcard-question">10-99 तक के संख्या पहचाने वाले बच्चों को छोटे समूह में घटाव के क्या टास्क दूँ, day 20 पे? <em style="color:var(--muted);font-size:12px;font-weight:400;">(Task for 10-99 recognition children in small group — subtraction — Day 20?)</em></div>
+      </div>
+      <div class="qcard-verdict">
+        <span class="verdict-winner vw-1">Option 1</span>
+        <div class="vote-score">3 <span>vs</span> 1</div>
+      </div>
+    </div>
+    <div class="qcard-body">
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-1">Option 1</span>
+          <span class="qopt-votes ov-1">3</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-1" style="width:75%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">4 numbered steps: (1) Tilli-bundle concrete (25 → remove 10 → ramp to 35-12, 42-15), (2) Number chart finger jump, (3) Story problems ("Raju has 48 marbles, 15 lost"), (4) Peer support — one child demonstrates with bundles. Critical note: "अभी उधार मत लगाएँ" (don't introduce borrowing yet — 45-12 ok, 32-15 not yet).</div>
+        <div class="qanalysis-box qa-win">
+          <div class="qa-title">Why it won</div>
+          <p>The progression across all 4 steps is pedagogically sound: concrete (tilli) → representational (chart) → abstract (story problem) → social (peer demonstration). The critical warning against borrowing ("अभी उधार मत लगाएँ") prevents a common teacher error and shows principled understanding. The peer support step (step 4) is a TaRL-aligned bonus. This is a complete learning sequence, not just a task list.</p>
+        </div>
+      </div>
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-2">Option 2</span>
+          <span class="qopt-votes ov-2">1</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-2" style="width:25%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">Tilli-bundle with story problem (25 apples, 12 sold) for 10 min. Story problems for 15 min (two problems given). Instruction: show with tillis after each problem, then write on chart. Extra support for hesitant bundle-openers.</div>
+        <div class="qanalysis-box qa-lose">
+          <div class="qa-title">Why it got fewer votes</div>
+          <p>Valid activities but limited to two methods (tilli + story problems) without the concrete→chart→abstract progression. No warning about borrowing — a critical guidance gap that Option 1 fills. The two provided story problems include "56 benches, 23 new arrived" (addition, not subtraction) — a content error that undermines confidence in the response's quality control.</p>
+        </div>
+      </div>
+    </div>
+    <div class="qcard-footer">
+      <div class="qf-icon">💡</div>
+      <div class="qf-text"><strong>Key insight:</strong> <strong>Pedagogical guardrails win votes.</strong> Option 1's explicit "don't introduce borrowing yet" note is the kind of guidance that prevents teacher errors — and instructors recognise that value immediately. Responses that anticipate what <em>not</em> to do are as valuable as responses that prescribe what to do.</div>
+    </div>
+  </div>
+
+  <!-- ── Q14: Content — Word problems subtraction/division patterns ── -->
+  <div class="qcard" data-subject="Maths" data-winner="opt1">
+    <div class="qcard-header">
+      <div class="qcard-meta">
+        <div class="qcard-tags">
+          <span class="badge badge-math">Maths</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Content</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Word Problems · Patterns</span>
+        </div>
+        <div class="qcard-question">क्या आप मुझे घटाव के और भाग के अलग-अलग पैटर्न के कुछ शाब्दिक सवाल बता सकते हैं? <em style="color:var(--muted);font-size:12px;font-weight:400;">(Can you give word problems for subtraction and division in different patterns?)</em></div>
+      </div>
+      <div class="qcard-verdict">
+        <span class="verdict-winner vw-1">Option 1</span>
+        <div class="vote-score">3 <span>vs</span> 1</div>
+      </div>
+    </div>
+    <div class="qcard-body">
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-1">Option 1</span>
+          <span class="qopt-votes ov-1">3</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-1" style="width:75%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">Section headers: Subtraction Patterns (4): direct subtraction, borrowing, comparison, remaining needed. Division Patterns (4): equal sharing, remainder, group formation, rate/price. Each pattern named with an example problem. Closes with "give different groups different patterns — this is Teaching at the Right Level."</div>
+        <div class="qanalysis-box qa-win">
+          <div class="qa-title">Why it won</div>
+          <p>Explicitly names each problem type ("pattern") — direct, comparison, remaining-needed for subtraction; equal-sharing, remainder, group-formation, rate for division. The teacher asked for "different patterns" and receives exactly that with labelled categories. The closing line connecting this to TaRL philosophy ("यही Teaching at the Right Level है") is motivating without being preachy. This is a reusable resource.</p>
+        </div>
+      </div>
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-2">Option 2</span>
+          <span class="qopt-votes ov-2">1</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-2" style="width:25%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">3 subtraction patterns (simple, larger numbers, remaining) and 3 division patterns (equal share, grouping, remainder). No pattern names — just numbered problems. Ends with suggestions for concrete materials and real-context problems.</div>
+        <div class="qanalysis-box qa-lose">
+          <div class="qa-title">Why it got fewer votes</div>
+          <p>Provides fewer patterns (3+3 vs 4+4) and doesn't name the pattern types. The teacher asked for "different patterns" — labelling them (comparison subtraction, rate division) is the explicit ask being fulfilled. Without labels, the teacher cannot explain to children "this is a comparison problem" — the pedagogical meta-layer is missing. The problems themselves are also slightly simpler (max 38 in subtraction vs 63-38 in Option 1).</p>
+        </div>
+      </div>
+    </div>
+    <div class="qcard-footer">
+      <div class="qf-icon">💡</div>
+      <div class="qf-text"><strong>Key insight:</strong> When the teacher asks for "patterns," <strong>name the patterns explicitly</strong> — don't just give examples. Labelled categories (comparison subtraction, rate division) make the resource reusable and teachable. Option 1 wins because the labels are the product, not just the problems attached to them.</div>
+    </div>
+  </div>
+
+  <!-- ── Q15: Lesson Planning — Day 15 Maths ── -->
+  <div class="qcard" data-subject="Maths" data-winner="opt1">
+    <div class="qcard-header">
+      <div class="qcard-meta">
+        <div class="qcard-tags">
+          <span class="badge badge-math">Maths</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Lesson Planning</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Day 15</span>
+        </div>
+        <div class="qcard-question">मैं day 15 पे हूँ. मुझे अब मैथ में क्या करना चाहिए? <em style="color:var(--muted);font-size:12px;font-weight:400;">(What should I do in Maths on Day 15?)</em></div>
+      </div>
+      <div class="qcard-verdict">
+        <span class="verdict-winner vw-1">Option 1</span>
+        <div class="vote-score">5 <span>vs</span> 4</div>
+      </div>
+    </div>
+    <div class="qcard-body">
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-1">Option 1</span>
+          <span class="qopt-votes ov-1">5</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-1" style="width:55.6%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">Timed session plan with level-specific activities: Warm-Up (10 min game), Math Talk (10 min with context), Number Knowledge (30 min — Beg/NR1, NR2, Sub/Div split), Word Problems (20 min — NR2 tilli-bundle). Time allocations given for every block.</div>
+        <div class="qanalysis-box qa-win">
+          <div class="qa-title">Why it won</div>
+          <p>For Maths lesson planning, Option 1's level-differentiated session plan delivers genuine added value over a summary. Each 10-30 minute block has level-specific activities (Beg/NR1 vs NR2 vs Sub/Div) — this is how a TaRL maths session actually runs. The time allocations total ~70 minutes, covering a full session. Option 1 wins because the differentiation IS the lesson plan for a TaRL class — you can't plan a TaRL Maths session without it.</p>
+        </div>
+      </div>
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-2">Option 2</span>
+          <span class="qopt-votes ov-2">4</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-2" style="width:44.4%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">Summary narrative: Warm-Up → Math Talk (market/calendar) → tilli-bundle Place Value + Ascending/Descending → one subtraction story problem. Advanced children: larger numbers or multiplication introduction. Midline 2 preparation mention.</div>
+        <div class="qanalysis-box qa-lose">
+          <div class="qa-title">Why it got fewer votes</div>
+          <p>Good overview but lacks level-differentiated activity breakdowns — the core of TaRL Maths planning. "Advanced children get larger numbers" is vague. No time allocations. The Midline 2 mention is contextually useful but doesn't change daily activities. For Maths lesson planning specifically, the absence of NR1/NR2/Sub/Div splits leaves the teacher with a plan that only works if the class is homogeneous — which it never is.</p>
+        </div>
+      </div>
+    </div>
+    <div class="qcard-footer">
+      <div class="qf-icon">💡</div>
+      <div class="qf-text"><strong>Key insight:</strong> Maths lesson planning is the <strong>one exception</strong> where Option 1's structured format beats Option 2's concise summary — because a TaRL Maths session is inherently differentiated by level. The structure IS the lesson plan. This explains why Maths Lesson Planning scores 5 vs 4 for Option 1, while Language Lesson Planning scores 2 vs 5 for Option 2: Language sessions can be run whole-class; Maths sessions cannot.</div>
+    </div>
+  </div>
+
+  <!-- ── Q16: Word Problems / Subtraction — Day 20 ── -->
+  <div class="qcard" data-subject="Maths" data-winner="opt1">
+    <div class="qcard-header">
+      <div class="qcard-meta">
+        <div class="qcard-tags">
+          <span class="badge badge-math">Maths</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Word Problems / Subtraction</span>
+          <span class="badge" style="background:#f3f4f6;color:var(--muted);font-size:10px;">Day 20</span>
+        </div>
+        <div class="qcard-question">मैं day 20 पे हूँ. शाब्दिक सवाल मैं घटाव के लिए क्या करना चाहिए? <em style="color:var(--muted);font-size:12px;font-weight:400;">(What to do for subtraction word problems on Day 20?)</em></div>
+      </div>
+      <div class="qcard-verdict">
+        <span class="verdict-winner vw-1">Option 1</span>
+        <div class="vote-score">7 <span>vs</span> 1</div>
+      </div>
+    </div>
+    <div class="qcard-body">
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-1">Option 1</span>
+          <span class="qopt-votes ov-1">7</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-1" style="width:87.5%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">Big Group: board example with tilli-bundle (Salim: 80 rupees, Naina: 37 less → how many?). Small Groups by level: Beg+NR1 = individual support (15-5); NR2 = 2-digit subtraction (63-27, 40-18); Subtraction/Division = large numbers (70-23, 234-76) + verification + peer explanation. Ends with level-specific extension tasks.</div>
+        <div class="qanalysis-box qa-win">
+          <div class="qa-title">Why it won</div>
+          <p>Covers all four learner levels with calibrated difficulty — Beg+NR1 doing 15-5 while Sub/Div level does 234-76 in the same class. The big-group board example is a shared anchor that every level can observe before splitting. The peer explanation task at Sub/Div level (explain your solution to the group) is a TaRL-aligned peer learning mechanism. This is a complete, multi-level lesson in one response.</p>
+        </div>
+      </div>
+      <div class="qopt">
+        <div class="qopt-header">
+          <span class="qopt-label ol-2">Option 2</span>
+          <span class="qopt-votes ov-2">1</span>
+        </div>
+        <div class="qvote-bar"><div class="qvb-fill-2" style="width:12.5%"></div></div>
+        <div class="qresponse-label">Response structure</div>
+        <div class="qresponse-box">Tilli-bundle method. One story problem (43 oranges, 17 sold). Children build 43 (4 bundles+3 tillis), remove 17, open a bundle, subtract. Progress: tillis → no tillis. Real-life contexts. Individual support for stuck children.</div>
+        <div class="qanalysis-box qa-lose">
+          <div class="qa-title">Why it got fewer votes</div>
+          <p>One problem example for the whole class without level differentiation. The tilli execution is correct and well explained, but applies the same approach to all learners. By Day 20, a class has children ranging from Beg level to Subtraction/Division level — one problem template doesn't serve this diversity. The response treats a mixed class as homogeneous, which is the primary TaRL design failure.</p>
+        </div>
+      </div>
+    </div>
+    <div class="qcard-footer">
+      <div class="qf-icon">💡</div>
+      <div class="qf-text"><strong>Key insight:</strong> The <strong>second-largest win margin (7 vs 1)</strong>. Level differentiation is non-negotiable for word problems in a mixed TaRL class. Option 2's single-template approach fails the teacher whose class spans 4 difficulty levels. When the classroom context inherently demands multi-level responses, the structured Option 1 format is not overhead — it is the answer.</div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+
 <!-- ════════ FOOTER ════════ -->
 <div class="report-footer">
   <div class="footer-l">TaRL India · Chatbot Nudge Experiment Report</div>
@@ -1491,5 +2448,27 @@ hr.divider {
   </div>
 </div>
 
+<script>
+function filterQ(type, btn) {
+  document.querySelectorAll('.qdiv-filter-btn').forEach(b => {
+    b.classList.remove('active','active-lang','active-math');
+  });
+  const cards = document.querySelectorAll('.qcard');
+  cards.forEach(card => {
+    const subj = card.dataset.subject;
+    const winner = card.dataset.winner;
+    let show = false;
+    if (type === 'all') show = true;
+    else if (type === 'Language') show = subj === 'Language';
+    else if (type === 'Maths') show = subj === 'Maths';
+    else if (type === 'opt1wins') show = winner === 'opt1';
+    else if (type === 'opt2wins') show = winner === 'opt2';
+    card.style.display = show ? '' : 'none';
+  });
+  btn.classList.add('active');
+  if (type === 'Language') btn.classList.add('active-lang');
+  if (type === 'Maths') btn.classList.add('active-math');
+}
+</script>
 </body>
 </html>
