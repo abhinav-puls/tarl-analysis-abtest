@@ -1,0 +1,1749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nudge Experiment — Instructor Feedback Thematic Report</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root {
+    --ink: #1a1a1a;
+    --ink-light: #4a4a4a;
+    --ink-muted: #888;
+    --rule: #d0cdc8;
+    --bg: #faf9f7;
+    --bg-card: #ffffff;
+    --bg-alt: #f4f2ee;
+    --accent-blue: #1e3a5f;
+    --accent-blue-light: #e8eef5;
+    --accent-gold: #c8912a;
+    --accent-gold-light: #fdf6e8;
+    --accent-red: #8b2635;
+    --accent-green: #1a4a2e;
+    --accent-green-light: #eaf3ec;
+    --accent-red-light: #f5eaec;
+    --maths-color: #1e3a5f;
+    --lang-color: #4a1e5f;
+    --maths-light: #e8eef5;
+    --lang-light: #f0e8f5;
+    --tag-bg: #efefef;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  /* ── COVER ── */
+  .cover {
+    background: var(--accent-blue);
+    color: white;
+    padding: 80px 80px 60px;
+    min-height: 320px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::after {
+    content: '';
+    position: absolute;
+    right: -60px;
+    bottom: -80px;
+    width: 380px;
+    height: 380px;
+    border: 60px solid rgba(255,255,255,0.06);
+    border-radius: 50%;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    right: 80px;
+    top: -30px;
+    width: 200px;
+    height: 200px;
+    border: 40px solid rgba(255,255,255,0.04);
+    border-radius: 50%;
+  }
+  .cover-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-bottom: 24px;
+  }
+  .cover h1 {
+    font-family: 'EB Garamond', serif;
+    font-size: 42px;
+    font-weight: 500;
+    line-height: 1.2;
+    max-width: 700px;
+    margin-bottom: 16px;
+  }
+  .cover-sub {
+    font-size: 16px;
+    opacity: 0.7;
+    max-width: 500px;
+    margin-bottom: 48px;
+  }
+  .cover-meta {
+    display: flex;
+    gap: 48px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    padding-top: 24px;
+  }
+  .cover-stat { }
+  .cover-stat-num {
+    font-family: 'EB Garamond', serif;
+    font-size: 36px;
+    font-weight: 500;
+    display: block;
+  }
+  .cover-stat-label {
+    font-size: 11px;
+    opacity: 0.55;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ── LAYOUT ── */
+  .page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 48px;
+  }
+
+  /* ── SECTION HEADERS ── */
+  .section-header {
+    padding: 56px 0 32px;
+    border-bottom: 2px solid var(--ink);
+    margin-bottom: 40px;
+  }
+  .section-eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--accent-gold);
+    margin-bottom: 10px;
+  }
+  .section-title {
+    font-family: 'EB Garamond', serif;
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .section-desc {
+    font-size: 14px;
+    color: var(--ink-light);
+    margin-top: 10px;
+    max-width: 700px;
+  }
+
+  /* ── EXECUTIVE SUMMARY ── */
+  .exec-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    margin-bottom: 48px;
+  }
+  .exec-cell {
+    background: var(--bg-card);
+    padding: 28px 24px;
+  }
+  .exec-cell-num {
+    font-family: 'EB Garamond', serif;
+    font-size: 40px;
+    font-weight: 500;
+    color: var(--accent-blue);
+    display: block;
+    line-height: 1;
+  }
+  .exec-cell-label {
+    font-size: 11px;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 6px;
+    margin-bottom: 8px;
+  }
+  .exec-cell-note {
+    font-size: 12px;
+    color: var(--ink-light);
+  }
+
+  .key-findings {
+    background: var(--accent-blue);
+    color: white;
+    padding: 36px 40px;
+    margin-bottom: 48px;
+  }
+  .key-findings h3 {
+    font-family: 'EB Garamond', serif;
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    opacity: 0.85;
+  }
+  .finding-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 40px;
+  }
+  .finding-list li {
+    font-size: 13px;
+    opacity: 0.88;
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .finding-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent-gold);
+  }
+
+  /* ── CLUSTER CARDS ── */
+  .cluster-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+  .cluster-card {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--accent-blue);
+    padding: 28px;
+  }
+  .cluster-card.lang { border-top-color: var(--lang-color); }
+  .cluster-card.both { border-top-color: var(--accent-gold); }
+  .cluster-number {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 6px;
+  }
+  .cluster-name {
+    font-family: 'EB Garamond', serif;
+    font-size: 22px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    color: var(--ink);
+  }
+  .cluster-desc {
+    font-size: 13px;
+    color: var(--ink-light);
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+  .theme-list { list-style: none; }
+  .theme-item {
+    border-top: 1px solid var(--rule);
+    padding: 14px 0;
+  }
+  .theme-item:first-child { border-top: none; padding-top: 0; }
+  .theme-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+  }
+  .theme-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .n-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    background: var(--tag-bg);
+    padding: 2px 8px;
+    border-radius: 2px;
+    color: var(--ink-light);
+    white-space: nowrap;
+  }
+  .quote-block {
+    background: var(--bg-alt);
+    border-left: 2px solid var(--accent-gold);
+    padding: 10px 14px;
+    margin-top: 8px;
+    font-family: 'EB Garamond', serif;
+    font-size: 14px;
+    color: var(--ink-light);
+    font-style: italic;
+    line-height: 1.55;
+  }
+  .quote-block + .quote-block { margin-top: 6px; }
+  .quote-attr {
+    font-size: 10px;
+    color: var(--ink-muted);
+    font-style: normal;
+    font-family: 'IBM Plex Sans', sans-serif;
+    margin-top: 4px;
+  }
+
+  /* ── SUBJECT BREAKDOWN ── */
+  .subject-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 28px 0 20px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 32px;
+  }
+  .subject-badge {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    background: var(--maths-color);
+    color: white;
+  }
+  .subject-badge.lang { background: var(--lang-color); }
+  .subject-label {
+    font-family: 'EB Garamond', serif;
+    font-size: 26px;
+    font-weight: 500;
+  }
+
+  .question-block {
+    margin-bottom: 36px;
+    border: 1px solid var(--rule);
+    background: var(--bg-card);
+  }
+  .question-header {
+    background: var(--bg-alt);
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .question-meta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .q-tag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 2px 10px;
+    background: var(--maths-light);
+    color: var(--maths-color);
+    border-radius: 2px;
+  }
+  .q-tag.lang { background: var(--lang-light); color: var(--lang-color); }
+  .q-category {
+    font-size: 11px;
+    color: var(--ink-muted);
+    font-style: italic;
+  }
+  .question-text {
+    font-family: 'EB Garamond', serif;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .vote-bar {
+    display: flex;
+    gap: 16px;
+    padding: 12px 24px;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--rule);
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .vote-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .vote-label {
+    font-size: 11px;
+    color: var(--ink-muted);
+  }
+  .vote-pill {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    padding: 3px 10px;
+    font-weight: 500;
+  }
+  .vote-pill.opt1 { background: var(--accent-blue-light); color: var(--accent-blue); }
+  .vote-pill.opt2 { background: var(--bg-alt); color: var(--ink-light); }
+  .vote-winner { background: var(--accent-gold-light); color: var(--accent-gold); }
+  
+  .option-themes {
+    padding: 20px 24px;
+  }
+  .option-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .mini-theme {
+    margin-bottom: 16px;
+  }
+  .mini-theme-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  .mini-theme-name {
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .mini-quote {
+    background: var(--bg-alt);
+    border-left: 2px solid var(--rule);
+    padding: 8px 12px;
+    font-family: 'EB Garamond', serif;
+    font-size: 13.5px;
+    color: var(--ink-light);
+    font-style: italic;
+    line-height: 1.5;
+    margin-bottom: 4px;
+  }
+  .mini-quote.gold { border-left-color: var(--accent-gold); }
+  .mini-quote.red { border-left-color: var(--accent-red); }
+
+  /* ── STRATEGIC ANALYSIS ── */
+  .analysis-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+  .analysis-card {
+    border: 1px solid var(--rule);
+    background: var(--bg-card);
+    overflow: hidden;
+  }
+  .analysis-card-head {
+    padding: 18px 24px;
+    background: var(--ink);
+    color: white;
+  }
+  .analysis-card-head.red { background: var(--accent-red); }
+  .analysis-card-head.green { background: var(--accent-green); }
+  .analysis-card-head.gold { background: var(--accent-gold); }
+  .analysis-card-head.blue { background: var(--accent-blue); }
+  .analysis-card-title {
+    font-family: 'EB Garamond', serif;
+    font-size: 19px;
+    font-weight: 500;
+  }
+  .analysis-card-subtitle {
+    font-size: 11px;
+    opacity: 0.7;
+    margin-top: 4px;
+  }
+  .analysis-card-body {
+    padding: 20px 24px;
+  }
+  .analysis-item {
+    border-bottom: 1px solid var(--rule);
+    padding: 14px 0;
+  }
+  .analysis-item:last-child { border-bottom: none; }
+  .analysis-item-label {
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+  .analysis-item-text {
+    font-size: 12.5px;
+    color: var(--ink-light);
+    line-height: 1.55;
+  }
+  .analysis-quote {
+    background: var(--bg-alt);
+    border-left: 2px solid var(--accent-gold);
+    padding: 8px 12px;
+    font-family: 'EB Garamond', serif;
+    font-size: 13px;
+    color: var(--ink-light);
+    font-style: italic;
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  /* ── INSTRUCTOR MENTAL MODEL ── */
+  .mental-model {
+    background: var(--accent-blue);
+    color: white;
+    padding: 48px;
+    margin-bottom: 40px;
+  }
+  .mental-model h3 {
+    font-family: 'EB Garamond', serif;
+    font-size: 26px;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  .mental-model-sub {
+    font-size: 13px;
+    opacity: 0.65;
+    margin-bottom: 32px;
+  }
+  .principle-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .principle-card {
+    background: rgba(255,255,255,0.07);
+    padding: 24px;
+    border-top: 2px solid var(--accent-gold);
+  }
+  .principle-number {
+    font-family: 'EB Garamond', serif;
+    font-size: 36px;
+    color: var(--accent-gold);
+    opacity: 0.6;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .principle-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .principle-desc {
+    font-size: 12px;
+    opacity: 0.72;
+    line-height: 1.6;
+  }
+  .principle-quote {
+    margin-top: 12px;
+    font-family: 'EB Garamond', serif;
+    font-size: 13px;
+    font-style: italic;
+    opacity: 0.8;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+  }
+
+  /* ── TABLES ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 32px;
+    font-size: 13px;
+  }
+  .data-table th {
+    background: var(--ink);
+    color: white;
+    padding: 10px 16px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+  .data-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: var(--bg-alt); }
+  .winner-row td { background: var(--accent-gold-light) !important; }
+  .win-tag {
+    font-size: 10px;
+    background: var(--accent-gold);
+    color: white;
+    padding: 1px 6px;
+    border-radius: 2px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-left: 6px;
+  }
+
+  /* ── DIVIDERS ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 48px 0;
+  }
+  .section-break {
+    height: 60px;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: var(--ink);
+    color: white;
+    padding: 32px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 80px;
+  }
+  .footer-text { font-size: 12px; opacity: 0.5; }
+
+  /* ── TOC ── */
+  .toc {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    padding: 32px 36px;
+    margin: 40px 0 60px;
+  }
+  .toc h3 {
+    font-family: 'EB Garamond', serif;
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: var(--ink-muted);
+  }
+  .toc-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 8px 0;
+    border-bottom: 1px dotted var(--rule);
+    font-size: 14px;
+  }
+  .toc-item:last-child { border: none; }
+  .toc-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-muted);
+  }
+  .toc-title { color: var(--ink); }
+
+  /* ── EGREGIOUS BAD ── */
+  .bad-card {
+    border: 1px solid var(--accent-red);
+    background: var(--accent-red-light);
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .bad-card-title {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--accent-red);
+    margin-bottom: 8px;
+  }
+  .bad-card-text {
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.6;
+  }
+  .good-card {
+    border: 1px solid var(--accent-green);
+    background: var(--accent-green-light);
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .good-card-title {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--accent-green);
+    margin-bottom: 8px;
+  }
+
+  .opt-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--rule);
+    margin-bottom: 24px;
+  }
+  .opt-col { padding: 20px 24px; }
+  .opt-col:first-child { border-right: 1px solid var(--rule); }
+  .opt-col-head {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 14px;
+  }
+  .opt-pro { color: var(--accent-green); font-size: 13px; line-height: 1.6; margin-bottom: 6px; }
+  .opt-con { color: var(--accent-red); font-size: 13px; line-height: 1.6; margin-bottom: 6px; }
+  .opt-pro::before { content: '✓ '; font-weight: 700; }
+  .opt-con::before { content: '✗ '; font-weight: 700; }
+
+  .hindi-verbatim {
+    font-style: normal;
+    font-size: 13px;
+    color: #5a4032;
+    background: #fdf6ec;
+    border-left: 3px solid var(--gold);
+    padding: 7px 12px;
+    margin-top: 5px;
+    border-radius: 0 3px 3px 0;
+    line-height: 1.65;
+    font-family: 'EB Garamond', serif;
+  }
+  .hindi-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 3px;
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-label">Internal Research Report · Nudge Experiment Analysis</div>
+  <h1>Instructor Feedback:<br>Thematic Analysis of A/B Nudge Responses</h1>
+  <div class="cover-sub">Qualitative synthesis of 154 feedback entries from 28 instructors across Mathematics and Language subjects</div>
+  <div class="cover-meta">
+    <div class="cover-stat">
+      <span class="cover-stat-num">154</span>
+      <span class="cover-stat-label">Feedback entries</span>
+    </div>
+    <div class="cover-stat">
+      <span class="cover-stat-num">28</span>
+      <span class="cover-stat-label">Unique instructors</span>
+    </div>
+    <div class="cover-stat">
+      <span class="cover-stat-num">18</span>
+      <span class="cover-stat-label">Questions tested</span>
+    </div>
+    <div class="cover-stat">
+      <span class="cover-stat-num">2</span>
+      <span class="cover-stat-label">Subjects (Math + Lang)</span>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- TOC -->
+  <div class="toc">
+    <h3>Contents</h3>
+    <div class="toc-item"><span class="toc-title">1 · Major Thematic Clusters (Cross-Subject)</span><span class="toc-num">§1</span></div>
+    <div class="toc-item"><span class="toc-title">2 · Mathematics — Question-by-Question Breakdown</span><span class="toc-num">§2</span></div>
+    <div class="toc-item"><span class="toc-title">3 · Language — Question-by-Question Breakdown</span><span class="toc-num">§3</span></div>
+    <div class="toc-item"><span class="toc-title">4 · Strategic Analysis: Where Both Responses Failed</span><span class="toc-num">§4</span></div>
+    <div class="toc-item"><span class="toc-title">5 · When Option 1 Context Added Value vs. When Brevity Won</span><span class="toc-num">§5</span></div>
+    <div class="toc-item"><span class="toc-title">6 · Instructor Mental Model for LLM-as-Judge</span><span class="toc-num">§6</span></div>
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="section-header">
+    <div class="section-eyebrow">Section 1</div>
+    <div class="section-title">Major Thematic Clusters</div>
+    <div class="section-desc">Six cross-subject clusters emerged from qualitative analysis of 154 instructor feedback entries. Clusters are organized by the type of instructional concern raised, spanning both Mathematics and Language domains.</div>
+  </div>
+
+  <!-- Stats bar -->
+  <div class="exec-grid">
+    <div class="exec-cell">
+      <span class="exec-cell-num">6</span>
+      <div class="exec-cell-label">Thematic Clusters</div>
+      <div class="exec-cell-note">Spanning both subjects</div>
+    </div>
+    <div class="exec-cell">
+      <span class="exec-cell-num">11</span>
+      <div class="exec-cell-label">Sub-themes identified</div>
+      <div class="exec-cell-note">From feedback analysis</div>
+    </div>
+    <div class="exec-cell">
+      <span class="exec-cell-num">72%</span>
+      <div class="exec-cell-label">Feedback in Hindi</div>
+      <div class="exec-cell-note">Translated for analysis</div>
+    </div>
+    <div class="exec-cell">
+      <span class="exec-cell-num">~5.5</span>
+      <div class="exec-cell-label">Avg. votes per response</div>
+      <div class="exec-cell-note">Range: 1–13</div>
+    </div>
+  </div>
+
+  <div class="key-findings">
+    <h3>Key Cross-Cutting Findings</h3>
+    <ul class="finding-list">
+      <li>Instructors strongly prioritize <b>differentiated, level-wise activities</b> — this is the #1 predictor of preference across both subjects</li>
+      <li>Option 1 (with principle + progression) won decisively on <b>complex, multi-level queries</b> (e.g., mixed-class design, activity sequencing)</li>
+      <li>Option 2 (manual only) won on <b>later-stage, familiar-domain</b> questions where instructors felt they didn't need principles explained</li>
+      <li><b>Concrete materials</b> (tilli-bundle, TLM) are considered essential context for Maths — their absence makes responses feel incomplete</li>
+      <li>Language instructors care most about <b>all children being able to participate</b>, not just advanced learners</li>
+      <li>Several responses in both subjects were criticized for <b>not advancing beyond what instructors already know</b> ("this is what we already do")</li>
+      <li>Instructors use <b>day-number as a proxy for child readiness</b> — responses ignoring this context are seen as generic</li>
+      <li>The biggest gap: bot responses rarely suggest <b>moving beyond the curriculum script</b> when children have progressed</li>
+    </ul>
+  </div>
+
+  <!-- CLUSTER CARDS -->
+  <div class="cluster-grid">
+
+    <div class="cluster-card">
+      <div class="cluster-number">Cluster A · Maths + Language</div>
+      <div class="cluster-name">Level-Differentiation as Non-Negotiable</div>
+      <div class="cluster-desc">Instructors across both subjects consistently rejected responses that did not differentiate tasks by student level. A response was only considered "good" if it gave each group of children a distinct, appropriately calibrated activity.</div>
+      <ul class="theme-list">
+        <li class="theme-item">
+          <div class="theme-header"><span class="theme-name">One-size-fits-all responses are rejected</span><span class="n-badge">n=14</span></div>
+          <div class="quote-block">"In this, every group has individual tasks which is why children will understand and complete the task easily."<div class="quote-attr">— User 203, Maths: Mixed-class Number Knowledge</div>
+          <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 203</span>प्रत्येक ग्रुप के लिए इंडीविजुअल टास्क है। इसमें भी।</div></div>
+          <div class="quote-block">"Each group had separate activities given, which is correct — because this way responses match the levels."<div class="quote-attr">— User 210, Maths: Mixed-class Number Knowledge</div>
+          <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 210</span>ये वाला जो ये वाला है ये सही है क्योंकि... सभी लेवल के बच्चों के लिए कुछ ना कुछ अक्टिविटीज में दी गई है।</div></div>
+        </li>
+        <li class="theme-item">
+          <div class="theme-header"><span class="theme-name">Level-wise tasks build confidence and participation</span><span class="n-badge">n=8</span></div>
+          <div class="quote-block">"All children participate together — when we say a sentence, every child tries to speak."<div class="quote-attr">— User 228, Language: Day 12 Oral Discussion</div>
+          <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 228</span>ये आंसर मैंने इसलिए चूस किया क्योंकि इसमें सभी लेवल के बच्चे हैं एक साथ होते हैं वो जब ये हम एक कोई वाक्य बोलेंगे तो हर बच्चा कोशिश करेगा बोलने की।</div></div>
+          <div class="quote-block">"Each level of children — their task should match — like ascending/descending order, place value, pattern — on this day children can easily do this."<div class="quote-attr">— User 224, Maths: Number Knowledge</div></div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="cluster-card">
+      <div class="cluster-number">Cluster B · Maths</div>
+      <div class="cluster-name">Day-Number as Learning Readiness Signal</div>
+      <div class="cluster-desc">Instructors have a strong mental model that child readiness scales with day number. Responses were criticized when they recommended beginner-level materials (like tilli-bundle) at late days (Day 18–20) without justification.</div>
+      <ul class="theme-list">
+        <li class="theme-item">
+          <div class="theme-header"><span class="theme-name">Late-day responses should move beyond basics</span><span class="n-badge">n=9</span></div>
+          <div class="quote-block">"By Day 20, we do not need to make children do word problems with tilli-bundle because the word problem concept will already be understood."<div class="quote-attr">— User 205, Maths: Day 20 Word Problems</div>
+          <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 205</span>डे 20 के अनुसार अब हमें बच्चों को तिली बंडल से शाब्दिक सवाल करवाने की आवश्यकता नहीं होनी चाहिए क्योंकि शाब्दिक सवाल का कॉन्सेप्ट ऑलरेडी उन बच्चों को समझ आ गया होगा।</div></div>
+          <div class="quote-block">"After 20 days, children know tilli-bundle very well — so we should give them varied activities, not just tilli-bundle."<div class="quote-attr">— User 214, Maths: Day 20 Activity</div>
+          <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 214</span>ना कि ऑप्शन बी जिसमें हम अभी भी तिल्ली बंडल का इस्तेमाल कर रहे हैं, क्योंकि 20 दिन के बाद बच्चों को तिल्ली बंडल की काफी ज्यादा नॉलेज हो चुकी होती है।</div></div>
+        </li>
+        <li class="theme-item">
+          <div class="theme-header"><span class="theme-name">Day 15 is a transition point — instructors expect a pivot</span><span class="n-badge">n=5</span></div>
+          <div class="quote-block">"It's Day 15 and most children are at 10–99 level so we should strengthen their addition and subtraction foundation."<div class="quote-attr">— User 220, Maths: Day 15 Planning</div>
+          <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 220</span>इसमें ऑप्शन भी ठीक है क्योंकि ज्यादातर बच्चे नंबर नॉलेज 10 से 99 स्तर पे है तो उन्हें जोड़ और घटाव की बुनियाद मजबूत करवानी चाहिए। मैथमैटिकल टॉक में प्लेस वैल्यू, असेंडिंग ऑर्डर, डिसेंडिंग ऑर्डर और वार्ड प्रॉब्लम में जोड़ घटाव के शब्दिक सवाल देने हैं।</div></div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="cluster-card lang">
+      <div class="cluster-number">Cluster C · Language</div>
+      <div class="cluster-name">Story & Engagement — Participation Above All</div>
+      <div class="cluster-desc">Language instructors frame effective story activities through the lens of full-class participation. Role play, picture discussion, and open-ended prompts are preferred because they include every level of child — not just strong readers.</div>
+      <ul class="theme-list">
+        <li class="theme-item">
+          <div class="theme-header"><span class="theme-name">Activities must be accessible to all levels simultaneously</span><span class="n-badge">n=10</span></div>
+          <div class="quote-block">"Picture should be shown and then discussion on the incident with the whole class — because children who see something first, learn better."<div class="quote-attr">— User 176, Language: Story Activity Engagement</div>
+          <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 176</span>मेरे अकॉर्डिंग बच्चों को हमें कहानी दिखानी चाहिए, चित्र दिखाना चाहिए फिर उसपे बातचीत करना चाहिए उस घटना पे पूरी क्लास से क्योंकि जो बच्चे हैं वो पहले देख कर ज्यादा अच्छा बोल सकते हैं।</div></div>
+          <div class="quote-block">"Story activity is good — if we're doing role play from a story, first we organize it, then all children participate — even the observers."<div class="quote-attr">— User 207, Language: Story Activity Engagement</div>
+          <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 207</span>ये ऐक्टिविटी अच्छी लगी क्योंकि अगर हम कोई भी रोल प्ले करवा रहे हैं, कहानी से तो पहले उनको ऑरेंज कर रहे हैं। उसके बाद सभी बच्चों का इसमें प्रतिभाग भी है कि देखने वाले बच्चे भी प्रतिभाग करेंगे। लेटर वाले भी, वर्ड वाले, पैरा स्टोरी वाले भी।</div></div>
+        </li>
+        <li class="theme-item">
+          <div class="theme-header"><span class="theme-name">Day 15+ story work should deepen comprehension, not repeat basics</span><span class="n-badge">n=7</span></div>
+          <div class="quote-block">"By Day 15, children read the story well. Now we can do role play, ask deep questions, mind map, and compare two stories — all this is very beneficial."<div class="quote-attr">— User 179, Language: Day 15 Story</div>
+          <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 179</span>अगर हम स्टोरी में क्लास में ऐसे ऐक्टिविटी कराएंगे जैसे हम पहले नाटक रूपी करवाएं फिर उसके बाद गहरी सोच में सवाल पूछें। फिर मैएंड मैप पे कराएं, फिर तुलना कराएं। दो कहानियों में — ये हमारे लिए बहुत ज्यादा बेनिफिट होगा।</div></div>
+          <div class="quote-block">"By Day 20, the complete story understanding has come. Now they need something different so that their interest in story grows more creative."<div class="quote-attr">— User 226, Language: Day 15 Story</div>
+          <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 226</span>कहानी में बच्चे जब आगे निकल चूके होते हैं, ये कहानी की पूरी समझ जब आ चुकी होती है। तो उनको कुछ डिफरेंट करने की जरूरत होती है ताकि उनका इन्ट्रेस्ट कहानी के रिलेटेड और बड़े और क्रिएटिव नॉलेज तैयार करने के लिए उनके अंदर वो सलाहियत पैदा हो सके।</div></div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="cluster-card lang">
+      <div class="cluster-number">Cluster D · Language</div>
+      <div class="cluster-name">Familiar Topics Drive Language Output</div>
+      <div class="cluster-desc">Instructors believe children speak and write more when given personally familiar or everyday topics. Abstract topics or curriculum-disconnected prompts are seen as barriers to expression, especially for early-level children.</div>
+      <ul class="theme-list">
+        <li class="theme-item">
+          <div class="theme-header"><span class="theme-name">Familiar/daily-life topics enable all children to respond</span><span class="n-badge">n=8</span></div>
+          <div class="quote-block">"In group discussion I take easy, everyday topics and ask questions so that all children can speak."<div class="quote-attr">— User 219, Language: Day 12 Oral Discussion</div>
+          <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 219</span>ग्रुप में ईज़ी रोज़मर्रा के टॉपिक लूंगी और उनसे सवाल पूछूंगी, ताकि सब बच्चे बोल सके, फिर छोटे ग्रुप में पिक्चर के थ्रू सिंपल से थोड़े डीप करके सवाल पूछूंगी, आखिर में बच्चों से उनकी राय और रीज़न पूछूंगी।</div></div>
+          <div class="quote-block">"Children's memories of home stay with them, so they can easily write about home — even at 10 days."<div class="quote-attr">— User 175, Language: Independent Writing Topic</div>
+          <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 175</span>मुझे ये वाला ऑप्शन बहुत अच्छा लगा। क्योंकि इसमें हम बच्चों को घर की जो यादें हैं वो पहले बच्चा घर से जो उसको याद आ रहा है। बच्चा अपने घर के बारे में लिखेगा। गर्ग की यादें उसके साथ रहती है तो वो लिख सकता है आसानी से शुरुआती 10 दिन में।</div></div>
+        </li>
+        <li class="theme-item">
+          <div class="theme-header"><span class="theme-name">Children's favorite topics produce the richest mind maps</span><span class="n-badge">n=4</span></div>
+          <div class="quote-block">"If we give children any topic they like, their thoughts come more and they can tell and write more, and they categorize very well."<div class="quote-attr">— User 207, Language: Day 25 Mind Map</div>
+          <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 207</span>मुझे ये अक्टिविटी अच्छी लगी की अगर हम बच्चों को कोई भी उनके मनपसंद टॉपिक देते हैं तो बच्चों के थॉट ज्यादा आते हैं और ज्यादा से ज्यादा बता पाते हैं और लिख भी पाते हैं।</div></div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="cluster-card both">
+      <div class="cluster-number">Cluster E · Both Subjects</div>
+      <div class="cluster-name">Big Group → Small Group → Individual Progression</div>
+      <div class="cluster-desc">Across both subjects, instructors show a clear mental model of lesson flow: introduce concepts in big group, practice in level-wise small groups, then individual work. Responses that skip this scaffolding are seen as unrealistic or incomplete.</div>
+      <ul class="theme-list">
+        <li class="theme-item">
+          <div class="theme-header"><span class="theme-name">Big-group introduction is non-negotiable</span><span class="n-badge">n=11</span></div>
+          <div class="quote-block">"First in the big group we do one word problem well with children, then in small groups they practice it level-wise."<div class="quote-attr">— User 206, Maths: Day 20 Word Problems</div>
+          <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 206</span>जो बड़े समूह में हम लोग इसमें करते भी हैं की एक सवाल को हम लोग पहले बड़े समूह में अच्छे से उसको बच्चों से पूछते हैं — इसमें क्या हुआ? इसमें दिया क्या है? प्रश्न में करना क्या है? पूछा क्या है?</div></div>
+          <div class="quote-block">"In the big group I'll explain the word problem through a story, then in small groups I'll give level-wise tasks. Those who don't understand, I'll help individually."<div class="quote-attr">— User 219, Maths: Day 20 Word Problems</div>
+          <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 219</span>बिग ग्रुप में स्टोरी से वर्ल्ड प्रॉब्लम समझौंगी फिर स्मॉल ग्रुप में लेवल के हिसाब से वर्ल्ड प्रॉब्लम का टास्क दूंगी। जिन बच्चों को समझ नहीं आएगी उनको मैं खुद हेल्प करूँगी और हर ग्रुप को अलग अलग प्रैक्टिस स्लिप्स दूंगी।</div></div>
+        </li>
+        <li class="theme-item">
+          <div class="theme-header"><span class="theme-name">Children learn from each other in small groups</span><span class="n-badge">n=5</span></div>
+          <div class="quote-block">"We can give small word problems in small groups so that children learn from each other."<div class="quote-attr">— User 211, Maths: Day 18 Subtraction Group</div>
+          <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 211</span>हम उनको छोटी छोटी वर्ल्ड प्रॉब्लम दे सकते हैं बड़े छोटे समूह में ताकि बच्चा जो है वो एक दूसरे की हेल्प से सीखें।</div></div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="cluster-card both">
+      <div class="cluster-number">Cluster F · Both Subjects</div>
+      <div class="cluster-name">Concreteness & Specificity as Trust Signals</div>
+      <div class="cluster-desc">Instructors prefer responses that name specific materials, activities, or techniques. Generic or principle-level answers without concrete examples are seen as unhelpful, even if structurally correct. This is a key differentiator between Option 1 and Option 2 feedback.</div>
+      <ul class="theme-list">
+        <li class="theme-item">
+          <div class="theme-header"><span class="theme-name">Concrete materials (tilli-bundle, TLM) must be named</span><span class="n-badge">n=9</span></div>
+          <div class="quote-block">"Through tilli-bundle, children learn quickly — I'll help subtraction-level children understand division through tilli-bundle."<div class="quote-attr">— User 219, Maths: Day 18 Activity</div>
+          <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 219</span>तीली बंडल की मदद से बच्चे जल्दी सीख जाते हैं, मैं घटाव स्तर के बच्चों को डिवीज़न समझाने की कोशिश करूँगी ताकि बच्चों को डिवीज़न समझ में आए।</div></div>
+          <div class="quote-block">"If children are given some tillis, they can do the work given to them at their level."<div class="quote-attr">— User 224, Maths: Day 18 Activity</div></div>
+        </li>
+        <li class="theme-item">
+          <div class="theme-header"><span class="theme-name">Vague or generic advice is flagged as unhelpful</span><span class="n-badge">n=6</span></div>
+          <div class="quote-block">"Everything in this seems the same to me. So I believe this is the best option." [said with sarcasm, indicating both options felt identical/uninformative]<div class="quote-attr">— User 226, Maths: Day 20 Activity Q1</div>
+          <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 226</span>इस मैं मुझे जो है वो सारी चीजें जो है बराबर दिखाई देती है। इसलिए मुझे मेरा मानना है कि ये सबसे कष्ट ऑप्शन है।</div></div>
+          <div class="quote-block">"This day, children can already do ascending/descending order, expanded form and place value on their own — if this work is given to them alone, they can easily do it." [implying the bot wasn't telling them anything new]<div class="quote-attr">— User 223, Maths: Mixed-class Number Knowledge</div>
+          <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 223</span>इस दिन बच्चे असेंडिंग और डिसेंडिंग ऑर्डर एक्सपैंडेड फॉर्म को अच्छी तरह से जान लेते हैं और अकेले में। और प्लेस वैल्यू भी अकेले में — इनको ये काम दिया जाए तो वो आसानी से कर सकते हैं।</div></div>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- SECTION 2 — MATHS -->
+  <div class="section-break"></div>
+  <div class="section-header">
+    <div class="section-eyebrow">Section 2</div>
+    <div class="section-title">Mathematics — Question-by-Question Analysis</div>
+    <div class="section-desc">Improvement themes, verbatim quotes, and vote breakdown for each of the 8 Maths questions tested across both options.</div>
+  </div>
+
+  <div class="subject-header">
+    <span class="subject-badge">Maths</span>
+    <span class="subject-label">8 Questions · 15 Response-Option Rows</span>
+  </div>
+
+  <!-- M-Q1 -->
+  <div class="question-block">
+    <div class="question-header">
+      <div class="question-meta">
+        <span class="q-tag">Maths Q1</span>
+        <span class="q-category">Activity Suggestion by Domain and Level</span>
+      </div>
+      <div class="question-text">Mixed class (6 at 0-9, 6 at 10-99, 2 addition, 14 subtraction, 12 word problem level) — what activity should I do in Number Knowledge on Day 20?</div>
+    </div>
+    <div class="vote-bar">
+      <div class="vote-item"><span class="vote-label">Option 1 (Principle + Progression):</span><span class="vote-pill opt1">5 votes</span></div>
+      <div class="vote-item"><span class="vote-label">Option 2 (Manual Only):</span><span class="vote-pill opt2">5 votes</span></div>
+      <div class="vote-item"><span class="vote-label">Verdict:</span><span class="vote-pill" style="background:#f5f5f5;color:#666">Split — no clear winner</span></div>
+    </div>
+    <div class="option-themes">
+      <div class="option-label">Option 1 — What instructors said</div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Liked: Level-specific activities in big group</span><span class="n-badge">n=4</span></div>
+        <div class="mini-quote gold">"Each level of children will learn according to their own understanding."<div class="quote-attr">— User 219</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 219</span>इसमें हर लेवल के बच्चे अपनी अपनी समझ के हिसाब से सीखेंगे।</div></div>
+        <div class="mini-quote gold">"First in big group we demonstrate, then 0-9 children learn ascending order and tilli-bundle together."<div class="quote-attr">— User 206</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 206</span>जो ये वाला है इसकी हमारा बड़े समूह में आ रहे हैं और एक ना हम करके दिखाएं और उसके बाद जो जीरो से नाइन के बच्चे हैं उनको भी हम आरोही क्रम और वही क्रम एक तिल्ली मंडल के माध्यम से हम लोग सीखा सकते हैं।</div></div>
+      </div>
+      <div class="option-label">Option 2 — What instructors said</div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Critique: By Day 20, tilli-bundle shouldn't still be primary</span><span class="n-badge">n=2</span></div>
+        <div class="mini-quote red">"By Day 20, children have already been doing tilli-bundle. But some children are still at L1. So we need to combine number cards with tilli-bundle to help them learn better."<div class="quote-attr">— User 205</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 205</span>क्योंकि बच्चे डे 20 पर हैं तो तेली बंडल हम बच्चों को पहले से ही करवातें आ रहे होंगे। बट अभी भी बच्चे एल वन पर बने हुए हैं। तो उनके साथ कुछ अंक कार्ड को मिलाकर के संख्या लाने की आवश्यकता है ताकि बच्चे बेहतर सीख पाए।</div></div>
+      </div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Suggestion: Add number cards alongside tilli-bundle for L1 children</span><span class="n-badge">n=1</span></div>
+        <div class="mini-quote">"Include differentiated activities based on student levels rather than using only tilli-bundles for all students."<div class="quote-attr">— Extracted improvement</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- M-Q2 -->
+  <div class="question-block">
+    <div class="question-header">
+      <div class="question-meta">
+        <span class="q-tag">Maths Q2</span>
+        <span class="q-category">Activity Suggestion by Level</span>
+      </div>
+      <div class="question-text">What task should I give children who recognize numbers 10-99 in a small group for subtraction on Day 20?</div>
+    </div>
+    <div class="vote-bar">
+      <div class="vote-item"><span class="vote-label">Option 1:</span><span class="vote-pill opt1 vote-winner">5 votes ★</span></div>
+      <div class="vote-item"><span class="vote-label">Option 2:</span><span class="vote-pill opt2">1 vote</span></div>
+    </div>
+    <div class="option-themes">
+      <div class="option-label">Option 1 — What instructors said (Clear winner)</div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Concrete materials (tilli-bundle) for starting subtraction</span><span class="n-badge">n=3</span></div>
+        <div class="mini-quote gold">"For Day 20, for 10-99 children doing subtraction — I'd start with tilli-bundle itself since we need to start from concrete things so children learn by touching."<div class="quote-attr">— User 221</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 221</span>अगर डे 20 में हम 10 से 99 वाले बच्चों को घटाव के लिए तैयार कर रहे हैं तो सबसे पहले हम सर से ही शुरू करते हैं क्योंकि उनको कंक्रीट चीजों से पहले पहचान करवातें हैं। बारो कैर्री बारो का कॉन्सेप्ट पहले नहीं देते, सिंगल डिजिट से ही पहले शुरुआत में उनको करवातें हैं, धीरे धीरे फिर हम सिंपल टु कॉम्प्लेक्स जाते हैं।</div></div>
+      </div>
+      <div class="option-label">Option 2 — What instructors said</div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Preferred word-problem approach regardless of day</span><span class="n-badge">n=1</span></div>
+        <div class="mini-quote red">"Whether my day is 20 or 10 or 30 — for whichever level the children are, I should explain to them in the language of word problems."<div class="quote-attr">— User 176</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 176</span>डे मेरा 20 हो या डे मेरा 10 हो या डे मेरा 30 हो, मेरे ख्याल से मुझे जो भी मेरे बच्चे हैं उनको किसी भी लेवल के हैं, उनको मुझे वर्ड प्रॉब्लम की लैंगुएज में ही समझाना चाहिए।</div></div>
+      </div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Improvement: Explain progression from concrete to abstract more clearly</span><span class="n-badge">n=2</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- M-Q3 -->
+  <div class="question-block">
+    <div class="question-header">
+      <div class="question-meta">
+        <span class="q-tag">Maths Q3</span>
+        <span class="q-category">Content</span>
+      </div>
+      <div class="question-text">Can you give me some word problems with different patterns of subtraction and division?</div>
+    </div>
+    <div class="vote-bar">
+      <div class="vote-item"><span class="vote-label">Option 1:</span><span class="vote-pill opt1 vote-winner">4 votes ★</span></div>
+      <div class="vote-item"><span class="vote-label">Option 2:</span><span class="vote-pill opt2">2 votes</span></div>
+    </div>
+    <div class="option-themes">
+      <div class="option-label">Option 1 — What instructors said</div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Liked: Problems organized by type (without borrowing → with borrowing → comparison)</span><span class="n-badge">n=3</span></div>
+        <div class="mini-quote gold">"Starting days: without-borrow questions, then with-borrow questions, then comparison questions — this progression is the right way."<div class="quote-attr">— User 177</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 177</span>इसमें हम बच्चों के साथ स्टार्टिंग ए डेज़ में विदाउट बार रोज़ वाले क्वेश्चन फिर बारो वाले क्वेश्चन करते हैं, ठीक है, फिर तुलना वाले क्वेश्चन करते हैं। मतलब फिर कंपैरिजन वाले भी क्वेश्चन करते हैं।</div></div>
+        <div class="mini-quote gold">"Different patterns are included, and we also see carry-type subtraction problems — good variety."<div class="quote-attr">— User 206</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 206</span>जो इसमें ये वाला है तो इसमें अलग अलग पैटर्न की भी है और पैटर्न के साथ साथ इसमें ये भी देखने को मिला की हमें जो हासिल वाले जो कैर्री वाले सवाल है तो घटामा वो भी हमारा पैटर्न देखने को मिला है। जो बी वाला है उसकी अपेक्षा ये वाला है। इसमें ये चीजें मुझे सही लगी। और तुलना वाले भी हैं इसमें।</div></div>
+      </div>
+      <div class="option-label">Option 2 — What instructors said</div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Preferred simpler problems matching class level</span><span class="n-badge">n=1</span></div>
+        <div class="mini-quote">"I chose this option because the addition and subtraction problems given are appropriate for my class — children can easily solve them."<div class="quote-attr">— User 223</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 223</span>मैंने ये ऑप्शन इसलिए चूस किया कि मेरी क्लास के हिसाब से जो एडिशन और सबट्रैक्शन के सवाल दिए गए हैं, इन सवाल को बचे आराम से हल कर सकते हैं।</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- M-Q4 -->
+  <div class="question-block">
+    <div class="question-header">
+      <div class="question-meta">
+        <span class="q-tag">Maths Q4</span>
+        <span class="q-category">Lesson Planning</span>
+      </div>
+      <div class="question-text">I am on Day 15. What should I do now in Maths?</div>
+    </div>
+    <div class="vote-bar">
+      <div class="vote-item"><span class="vote-label">Option 2:</span><span class="vote-pill opt2 vote-winner">6 votes ★</span></div>
+      <div class="vote-item"><span class="vote-label">Option 1:</span><span class="vote-pill opt1">5 votes</span></div>
+    </div>
+    <div class="option-themes">
+      <div class="option-label">Option 2 — Why it won (slightly)</div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Felt more aligned with Day 15 classroom reality</span><span class="n-badge">n=4</span></div>
+        <div class="mini-quote gold">"Most children are at 10–99 level so strengthening their addition and subtraction foundation is needed. In Math Talk — place value."<div class="quote-attr">— User 220</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 220</span>इसमें ऑप्शन भी ठीक है। क्योंकि ज्यादातर बच्चे नंबर नॉलेज 10 से 99 के हैं तो हमें बच्चों के साथ जोड़ और घटाव के सवाल करने हैं। और मैथमैटिकल टॉक में प्लेस वैल्यू, असेंडिंग ऑर्डर, डिसेंडिंग ऑर्डर और वार्ड प्रॉब्लम में जोड़ घटाव के शब्दिक सवाल देने हैं तो ऑप्शन भी ठीक रहेगा।</div></div>
+        <div class="mini-quote gold">"After Day 15, the concept of subtraction should be introduced through TLM and games — calendar, market talk."<div class="quote-attr">— User 222</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 222</span>संख्या पहचान के बाद बच्चों को 15 दिन के बाद। घटाव की बुनियादी सवाल में। की कॉन्सेप्ट TLM के माध्यम से। संख्या पहचान में मजबूती युक्त। कुछ तिल बंडल के कौन सबसे घटाओ। क्रिया विधि कराना खेल के माध्यम से। जैसे कैलेंडर पर बात करना। बाजार पर बात करना।</div></div>
+      </div>
+      <div class="option-label">Option 1 — Why instructors liked it</div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Domain-wise structure (warm-up → math talk → group work) appealed to structured thinkers</span><span class="n-badge">n=4</span></div>
+        <div class="mini-quote gold">"I like this activity because it is domain-wise: first warm up, then math conversation on any topic, then group-wise tasks."<div class="quote-attr">— User 207</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 207</span>मुझे ये ऐक्टिविटी अच्छी लगी क्योंकि इसमें डोमेन वाइज दिया हुआ है कि पहले हम क्लास में तेरे साथ वार्म अप करेंगे, फिर हम उनसे बातचीत करेंगे। गणित में किसी भी टॉपिक को लेकर देन उसके बाद हम नंबर नॉलेज की जो आते हैं तो बिगिनर और एल वन के बच्चों को हम काउंटिंग सीखा रहे हैं।</div></div>
+      </div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Improvement across both: Neither mentioned what to do if children haven't progressed by Day 15</span><span class="n-badge">n=3</span></div>
+        <div class="mini-quote red">"By Day 15, the camp is almost over. Most children should be at 10–99. So calendar and market are the best options for addition and subtraction."<div class="quote-attr">— User 204 (suggesting bot should've said this)</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- M-Q5 -->
+  <div class="question-block">
+    <div class="question-header">
+      <div class="question-meta">
+        <span class="q-tag">Maths Q5</span>
+        <span class="q-category">Activity Suggestion — Math Talk</span>
+      </div>
+      <div class="question-text">I am on Day 20. What should I do in Math Talk?</div>
+    </div>
+    <div class="vote-bar">
+      <div class="vote-item"><span class="vote-label">Option 1:</span><span class="vote-pill opt1 vote-winner">8 votes ★</span></div>
+      <div class="vote-item"><span class="vote-label">Option 2:</span><span class="vote-pill opt2">3 votes</span></div>
+    </div>
+    <div class="option-themes">
+      <div class="option-label">Option 1 — Clear winner: Picture-based discussion with estimation</div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Market/fair picture prompts estimation and logical reasoning</span><span class="n-badge">n=5</span></div>
+        <div class="mini-quote gold">"On Day 20 I'll take pictures of market and fair for Math Talk — first show picture, children observe, understand what it is, then make mathematical connections."<div class="quote-attr">— User 176</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 176</span>जो डे मेरा 20 है मैथेमेटिकल टॉक मैथ्स टॉक में मैं बाजार और मेले की चित्र लेकर जाना चाहूंगी। क्यों? क्योंकि सबसे पहले कुछ अपने बच्चों को चित्र दिखाऊंगी तो बच्चे उस चित्र को देखकर अंडरस्टैंड करेंगे की वो चित्र है किसका है जब वो अंडरस्टैंड करेंगे जब उनको लगेगा की हाँ भाई ये चित्र देखा गया है उससे वो बच्चा ज्यादा जल्दी से उसको जब डेली लाइफ के साथ जोड़ेगा तो ज्यादा अच्छे से ऑसर दे पाएगा।</div></div>
+        <div class="mini-quote gold">"On Day 20 we can show a picture and ask children to estimate — this develops estimation sense and mathematical logic."<div class="quote-attr">— User 179</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 179</span>मुझे लगता है कि डे 20 के अकॉर्डिंग मैथ टॉक में हम ये करवा सकते हैं कि एक चित्र दिखा के उन्हें बोले कि अनुमान लगाएं इससे एक तो ये चीज़ होगी कि उनको एस्टीमेशन का जो कॉन्सेप्ट है वो आएगा अनुमान लगाना और दूसरी ये होगी की उन्होंने अनुमान लगाया उसके बाद मैं उनको चाहूं तो उनको गिन कर भी दिखवा सकती हूँ।</div></div>
+      </div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Questions should be level-differentiated even in Math Talk</span><span class="n-badge">n=3</span></div>
+        <div class="mini-quote gold">"Questions are asked level-wise in Math Talk so children find it easy to answer — there is ease in mathematical talk."<div class="quote-attr">— User 200</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 200</span>मैं क्रॉक में प्रश्न मेरे स्तर के अनुसार पूछे जाते हैं तो बच्चे आंसर देने में उनको सरलता होती है। गणतीय बातचीत में अब बच्चे सहजता होती है।</div></div>
+      </div>
+      <div class="option-label">Option 2 — What supporters said</div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Preferred whole-class approach without level-splitting</span><span class="n-badge">n=2</span></div>
+        <div class="mini-quote">"Math Talk is a big group activity — the whole class sees the same picture and all children carefully observe it."<div class="quote-attr">— User 210</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 210</span>मैथ्स स्टॉक की गतिविधि। ये बिग ग्रुप की गतिविधि है तो इसमें हम पूरी कक्षा को एक साथ लेकर चलते हैं। पूरी कक्षा को ही चित्र दिखाया जाता है जीतने भी बच्चे वहाँ बैठते हैं वो सारे उस चित्र को ध्यान से देखते हुए आगे हम उनसे प्रश्न जो है वो पूछते हैं।</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- M-Q6 -->
+  <div class="question-block">
+    <div class="question-header">
+      <div class="question-meta">
+        <span class="q-tag">Maths Q6</span>
+        <span class="q-category">Word Problems / Subtraction</span>
+      </div>
+      <div class="question-text">I am on Day 20. What should I do for subtraction in Word Problems?</div>
+    </div>
+    <div class="vote-bar">
+      <div class="vote-item"><span class="vote-label">Option 1:</span><span class="vote-pill opt1 vote-winner">8 votes ★</span></div>
+      <div class="vote-item"><span class="vote-label">Option 2:</span><span class="vote-pill opt2">2 votes</span></div>
+    </div>
+    <div class="option-themes">
+      <div class="option-label">Option 1 — Strong winner: Big group → level-wise small group → individual</div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Big group first, then level-specific word problems</span><span class="n-badge">n=5</span></div>
+        <div class="mini-quote gold">"First understand word problems with a story in big group, then give level-wise tasks in small groups — those who don't understand, I'll help personally."<div class="quote-attr">— User 219</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 219</span>बिग ग्रुप में स्टोरी से वर्ल्ड प्रॉब्लम समझौंगी फिर स्मॉल ग्रुप में लेवल के हिसाब से वर्ल्ड प्रॉब्लम का टास्क दूंगी। जिन बच्चों को समझ नहीं आएगी उनको मैं खुद हेल्प करूँगी और हर ग्रुप को अलग अलग प्रैक्टिस स्लिप्स दूंगी।</div></div>
+        <div class="mini-quote gold">"Word problems are given first in big group, then level-specific groups, then individually — Option A is right."<div class="quote-attr">— User 220</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 220</span>इसमें ऑप्शन ए जो है वो ठीक है क्योंकि वार्ड प्रॉब्लम में बच्चों के साथ पहले बड़े ग्रुप में काम किया जाता है। फिर लेवल स्पेसिफिक ग्रुप बना के ग्रुप्स में काम दिया जाता है और उसके बाद इंडीविजुवल्ली उस काम को बच्चे करते हैं तो ऑप्शन ए ठीक रहेगा।</div></div>
+      </div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">By Day 20, tilli-bundle scaffolding should be removed for word problems</span><span class="n-badge">n=2</span></div>
+        <div class="mini-quote gold">"By Day 20, we don't need tilli-bundle for word problems anymore — children should now solve directly."<div class="quote-attr">— User 205</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 205</span>डे 20 के अनुसार अब हमें बच्चों को तिली बंडल से शाब्दिक सवाल करवाने की आवश्यकता नहीं होनी चाहिए क्योंकि शाब्दिक सवाल का कॉन्सेप्ट ऑलरेडी उन बच्चों को समझ आ गया होगा। तो अब हमें बोर्ड पर डेमॉन्स्ट्रेशन करने के बाद छोटे समूह में हर लेवल के बच्चों को लेवल अनुसार टास्क देने की आवश्यकता है।</div></div>
+      </div>
+      <div class="option-label">Option 2 — What supporters said</div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Real-life connections (shop, market) make children more focused</span><span class="n-badge">n=2</span></div>
+        <div class="mini-quote">"These are connected to daily life — children focus more because the context of a shop means something to them."<div class="quote-attr">— User 228</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 228</span>इसमें हम बच्चों को एक किस चीज़ की तरफ लेके जा रहे हैं कहानी जैसे कि ये भी रोज़मर्रा की जिंदगी से जुड़े हैं कि बच्चे इसपे ज्यादा फोकस करते हैं और सोचते हैं क्योंकि बच्चों का मतलब दुकान से कुछ चीजों को लाना मतलब दुकान से वो अट्रैक्ट होते हैं।</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- M-Q7 -->
+  <div class="question-block">
+    <div class="question-header">
+      <div class="question-meta">
+        <span class="q-tag">Maths Q7</span>
+        <span class="q-category">Number Knowledge / Activity Design</span>
+      </div>
+      <div class="question-text">How do I design a Number Knowledge activity for a mixed class?</div>
+    </div>
+    <div class="vote-bar">
+      <div class="vote-item"><span class="vote-label">Option 1 only:</span><span class="vote-pill opt1 vote-winner">13 votes ★ (uncontested)</span></div>
+    </div>
+    <div class="option-themes">
+      <div class="option-label">Option 1 — Unanimously preferred: Level-specific tasks with concrete materials</div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Ascending/descending, place value, patterns as shared topics for mixed groups</span><span class="n-badge">n=6</span></div>
+        <div class="mini-quote gold">"On Day 15–17, in big group ascending and descending order — even beginner can learn alongside advanced children — they learn by seeing."<div class="quote-attr">— User 176</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 176</span>मेरे ख्याल से डे 15 से लेके 17 के अनुसार नंबर नॉलेज की एक्टिव गतिविधि में हमें बिग ग्रुप में सेंडिंग और डिसेंडिंग अगर हम बच्चे को करवाएंगे पूरी क्लास में तो वो अच्छे से सीख सकता है। उसमें बिगिनर भी है, 1 से 29 भी है, 10 टु 99 के भी बच्चे हैं, हर लेवल के बच्चे हैं।</div></div>
+        <div class="mini-quote gold">"Level-wise topics like ascending order, descending order, place value, patterns — on this day children can easily do these activities."<div class="quote-attr">— User 224</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 224</span>ऑप्शन ए इसलिए चूस किया कि इसमें बच्चों का लेवल के हिसाब से जो नंबर नॉलेज के टॉपिक है जैसे असेटिंग डिसेंडिंग प्लेस वैल्यू पैटर्न इस दिन में बच्चे ये आराम से कर सकते हैं।</div></div>
+      </div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Tilli-bundle makes number concepts tangible and understandable</span><span class="n-badge">n=4</span></div>
+        <div class="mini-quote gold">"Through tilli-bundle, children easily learn and connect. Like asking — in 45, how many bundles and how many sticks? This place value work is very good."<div class="quote-attr">— User 175</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 175</span>मुझे ये वाले ऑप्शन इसमें जो पहला वाला जिसपे हम बच्चों को असेंडिंग ऑर्डर है या पैटर्न्स है, स्मॉल ग्रुप्स में आम बच्चों को करवातें हैं। तीली बंडल संख्याएं भी बनाने तो जैसे हम बात पूछते हैं 45 में कितने बंडल कितनी तीली आई है — ये बहुत अच्छा। प्लेस वैल्यू हर एक जैसे हमने डिजिट लिखे तो उसपे प्लेस वैल्यू किसका क्या है — ये भी बहुत अच्छा है इस दिन जो 15 टु 17 डे के लिए।</div></div>
+      </div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Improvement: Response should specify what teacher does while each group works independently</span><span class="n-badge">n=3</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- M-Q8 -->
+  <div class="question-block">
+    <div class="question-header">
+      <div class="question-meta">
+        <span class="q-tag">Maths Q8</span>
+        <span class="q-category">Activity Suggestion by Domain and Level</span>
+      </div>
+      <div class="question-text">What should I give subtraction-level children in small group during Number Knowledge activity on Day 18?</div>
+    </div>
+    <div class="vote-bar">
+      <div class="vote-item"><span class="vote-label">Option 1:</span><span class="vote-pill opt1">4 votes</span></div>
+      <div class="vote-item"><span class="vote-label">Option 2:</span><span class="vote-pill opt2">4 votes</span></div>
+      <div class="vote-item"><span class="vote-label">Verdict:</span><span class="vote-pill" style="background:#f5f5f5;color:#666">Split — context matters most</span></div>
+    </div>
+    <div class="option-themes">
+      <div class="option-label">Both options — What made each preferred</div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Opt 1: Group-based activity with tilli support is age-appropriate for Day 18</span><span class="n-badge">n=3</span></div>
+        <div class="mini-quote gold">"We need to form groups for subtraction children and give group activity — this is explained better in Option 1."<div class="quote-attr">— User 205</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 205</span>हाँ, हमें घटाव के बच्चों के समूह बनाकर उनको समूह में ऐक्टिविटी देने की आवश्यकता है, जो इसमें बता ज्यादा अच्छे से बताई गई है।</div></div>
+      </div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Opt 2: Small word problems in peer-groups builds collaborative learning</span><span class="n-badge">n=2</span></div>
+        <div class="mini-quote">"We can give small word problems in small groups so that children learn from each other — and reinforce two-digit numbers."<div class="quote-attr">— User 211</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 211</span>हम उनको छोटी छोटी वर्ल्ड प्रॉब्लम दे सकते हैं बड़े छोटे समूह में ताकि बच्चा जो है वो एक दूसरे की हेल्प से सीखें और दोहरी संख्या को पहले बाद जैसे 20 से 8 दिन फिर बाद से पांच कम डाउन होगा।</div></div>
+      </div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Critical gap: Neither response addressed what to do if subtraction children are far behind</span><span class="n-badge">n=2</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3 — LANGUAGE -->
+  <div class="section-break"></div>
+  <div class="section-header">
+    <div class="section-eyebrow">Section 3</div>
+    <div class="section-title">Language — Question-by-Question Analysis</div>
+    <div class="section-desc">Improvement themes, verbatim quotes, and vote breakdown for all 10 Language questions tested.</div>
+  </div>
+
+  <div class="subject-header">
+    <span class="subject-badge lang">Language</span>
+    <span class="subject-label">10 Questions · 19 Response-Option Rows</span>
+  </div>
+
+  <!-- L-Q1 -->
+  <div class="question-block">
+    <div class="question-header">
+      <div class="question-meta">
+        <span class="q-tag lang">Language Q1</span>
+        <span class="q-category">Content by Domain</span>
+      </div>
+      <div class="question-text">On Day 10, I want children to do independent writing. What topic should I take?</div>
+    </div>
+    <div class="vote-bar">
+      <div class="vote-item"><span class="vote-label">Option 2:</span><span class="vote-pill opt2 vote-winner">4 votes ★</span></div>
+      <div class="vote-item"><span class="vote-label">Option 1:</span><span class="vote-pill opt1">2 votes</span></div>
+    </div>
+    <div class="option-themes">
+      <div class="option-label">Option 2 — Why it won</div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Familiar topics and past stories give children a base to write from</span><span class="n-badge">n=3</span></div>
+        <div class="mini-quote gold">"Children's memories of home stay with them so they can easily write about it — even in 10 days, they can write words from Mind Map."<div class="quote-attr">— User 175</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 175</span>मुझे ये वाला ऑप्शन बहुत अच्छा लगा। क्योंकि इसमें हम बच्चों को घर की जो यादें हैं वो पहले बच्चा घर से जो उसको याद आ रहा है। बच्चा अपने घर के बारे में लिखेगा की क्या क्या उसने देखा है क्योंकि गर्ग की यादें उसके साथ रहती है तो वो लिख सकता है आसानी से शुरुआती 10 दिन में।</div></div>
+        <div class="mini-quote gold">"Children remember previously read stories — they can write a lot about that. Also familiar experience-based topics — things they know."<div class="quote-attr">— User 210</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 210</span>एक तो बच्चों को कहानी जो पिछली पढ़ाई गई है। उसकी वो कहीं ना कहीं याद रहता है तो उस पर बच्चे काफी कुछ लिख सकते हैं उसके अलावा परिचित अनुभव पर आधारित जो यानी कि जो जिन चीजों से वो परिचित हैं उन चीजों पर भी वो ज्यादा खुलकर लिख सकते हैं।</div></div>
+      </div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Option 1 critique: Mind Map in independent writing is conflating two activities</span><span class="n-badge">n=1</span></div>
+        <div class="mini-quote red">"Option B is better — in Option A, independent writing is mixing in Mind Map. In independent writing, we only write — no Mind Map."<div class="quote-attr">— User 221</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 221</span>ऑप्शन बी जो है वो सही रहेगा क्योंकि जो ऑप्शन ए है उसमें। इंडिपेंडेंट राइटिंग में मैएंड मैप का भी ढा रहा है कि मैएंड मैप में जो शब्द आएँगे उनको बोर्ड पर लिखेंगे मगर इंडिपेंडेंट राइटिंग में हम मैएंड में अपनी करवातें हैं उसमें सिर्फ हम राइटिंग करते हैं।</div></div>
+      </div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Improvement: Topic should connect to the story currently being read in class</span><span class="n-badge">n=2</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- L-Q2 -->
+  <div class="question-block">
+    <div class="question-header">
+      <div class="question-meta">
+        <span class="q-tag lang">Language Q2</span>
+        <span class="q-category">Activity Suggestion by Domain and Level</span>
+      </div>
+      <div class="question-text">What should I do in Story with Beginner, Letter, and Word-level children?</div>
+    </div>
+    <div class="vote-bar">
+      <div class="vote-item"><span class="vote-label">Option 1:</span><span class="vote-pill opt1 vote-winner">6 votes ★</span></div>
+      <div class="vote-item"><span class="vote-label">Option 2:</span><span class="vote-pill opt2">1 vote</span></div>
+    </div>
+    <div class="option-themes">
+      <div class="option-label">Option 1 — Strong winner: Separate tasks for each level within same story</div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Each level must have its own story task (listening, finger-pointing, words, sentences)</span><span class="n-badge">n=5</span></div>
+        <div class="mini-quote gold">"Every level of children — Beginner, Letter, Word — needs a different story activity. This is explained here."<div class="quote-attr">— User 205</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 205</span>हाँ, क्योंकि हमें हर इस सर के बच्चों को अलग अलग गतिविधियों कहानी में देने की आवश्यकता है जो इस। हाँ, मैं बताया गया है।</div></div>
+        <div class="mini-quote gold">"These words children would have heard before when we were reading the story — so on the next day they're familiar with the words."<div class="quote-attr">— User 209</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 209</span>क्योंकि ये शब्द बच्चों ने पहले हमसे सुन रखे होंगे। जब हम कहानी पढ़ रहे हूँ, पढ़ा रहे होंगे और तो बच्चा दूसरे दिन भी इस गतिविधि को करेंगे तो वो उन शब्दों से परिचित होंगे इसलिए सही है।</div></div>
+      </div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Improvement: Should specify teacher movement between groups during the activity</span><span class="n-badge">n=2</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- L-Q3 -->
+  <div class="question-block">
+    <div class="question-header">
+      <div class="question-meta">
+        <span class="q-tag lang">Language Q3</span>
+        <span class="q-category">Activity Suggestion by Domain and Level</span>
+      </div>
+      <div class="question-text">My class has different level children. Today is Day 12. What oral discussion should I do in Language?</div>
+    </div>
+    <div class="vote-bar">
+      <div class="vote-item"><span class="vote-label">Option 2:</span><span class="vote-pill opt2 vote-winner">6 votes ★</span></div>
+      <div class="vote-item"><span class="vote-label">Option 1:</span><span class="vote-pill opt1">5 votes</span></div>
+    </div>
+    <div class="option-themes">
+      <div class="option-label">Option 2 — Narrow winner: Everyday relatable topics for oral discussion</div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Oral discussion works best with topics all children know something about</span><span class="n-badge">n=4</span></div>
+        <div class="mini-quote gold">"Easy everyday topics in group, ask questions so all children can speak. Small group via pictures — deeper questions. Finally ask children's opinion and reason."<div class="quote-attr">— User 219</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 219</span>ग्रुप में ईज़ी रोज़मर्रा के टॉपिक लूंगी और उनसे सवाल पूछूंगी, ताकि सब बच्चे बोल सके, फिर छोटे ग्रुप में पिक्चर के थ्रू सिंपल से थोड़े डीप करके सवाल पूछूंगी, आखिर में बच्चों से उनकी राय और रीज़न पूछूंगी। और हर बच्चे को बोलने का मौका दूंगी और सोचने का टाइम दूंगी।</div></div>
+        <div class="mini-quote gold">"All level children are together — when we say a sentence, every child tries to speak."<div class="quote-attr">— User 228</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 228</span>ये आंसर मैंने इसलिए चूस किया क्योंकि इसमें सभी लेवल के बच्चे हैं एक साथ होते हैं वो जब ये हम एक कोई वाक्य बोलेंगे तो हर बच्चा कोशिश करेगा बोलने की। अगर कोई स्टोरी का बच्चा एक आंसर करेगा जैसे कि — एक बार एक बगीचे में एक फूल था — तो जो बाकी सतह के बच्चे होंगे उनके दिमाग में भी आ जाएगा की हमें इसके आगे कैसे कहानी को पूरा करना है।</div></div>
+      </div>
+      <div class="option-label">Option 1 — What supporters liked</div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Structured oral discussion (vocabulary building, sentence making) good for Day 12</span><span class="n-badge">n=3</span></div>
+        <div class="mini-quote gold">"This activity is the best — in this, children get to speak more. By Day 12, vocabulary has grown, children speak and make sentences well."<div class="quote-attr">— User 177</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 177</span>ये गतिविधि सबसे बेस्ट है क्योंकि इस गतिविधि में बच्चों को ज्यादा से ज्यादा बोल पाते हैं और जैसे कि ये बारहवां दिन है। बच्चे पढ़ना और लिखना भी सीघे होते हैं और उनकी वोकबुलरी भी बढ़ गई होती है। तो बच्चे अच्छे से बोल पाते हैं। इसमें मतलब बिगिनर लेवल का बच्चा भी बोलता है। लेटर लेवल का भी वर्ड और पैरा लेवल और स्टोरी लेवल के बच्चे भी अच्छे से सेंटेंसियल स्टोरी क्रियेट कर सकते हैं।</div></div>
+      </div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Improvement: Neither response clearly bridged Beginner participation with Para/Story-level discussion</span><span class="n-badge">n=3</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- L-Q4 -->
+  <div class="question-block">
+    <div class="question-header">
+      <div class="question-meta">
+        <span class="q-tag lang">Language Q4</span>
+        <span class="q-category">Content by Level</span>
+      </div>
+      <div class="question-text">8 of my children recognize digits. Give me 5–6 easy subtraction questions for them.</div>
+    </div>
+    <div class="vote-bar">
+      <div class="vote-item"><span class="vote-label">Option 1:</span><span class="vote-pill opt1 vote-winner">3 votes ★</span></div>
+      <div class="vote-item"><span class="vote-label">Option 2:</span><span class="vote-pill opt2">2 votes</span></div>
+    </div>
+    <div class="option-themes">
+      <div class="option-label">Option 1 — Slight winner: Ones and tens concept alignment</div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Ones and tens (ikāī-dahaī) concept is the right starting point for digit-level children</span><span class="n-badge">n=2</span></div>
+        <div class="mini-quote gold">"If children recognize digits, then ones and tens concept is the best — because they understand up to single digits, and with that we can go to two-digit subtraction."<div class="quote-attr">— User 179</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 179</span>मुझे ये वाला ऑप्शन अच्छा लगा है अगर तो मेरी क्लास में जो बच्चे हैं उनको डिजिट की पहचान है तो फिर मुझे लगता है कि जो इकाई और दिखाई वाला जो कॉन्सेप्ट है वन्स और टेंस का वो बेस्ट कॉन्सेप्ट होगा उनके लिए क्योंकि उनको पता है। अगर उन बच्चों को ये सब कुछ पता है तो हमें उनको सिंपल सब्रैक्शन के क्वेश्चन देने की कोई जरूरत नहीं है हमें सीधे उनको वर्ड प्रॉब्लम का कॉन्सेप्ट देना चाहिए।</div></div>
+      </div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Improvement: Question is in Language section but is a Maths question — cross-domain confusion</span><span class="n-badge">n=1</span></div>
+        <div class="mini-quote red">"Can we see the second option again?" [User appeared to want to compare before deciding, suggesting both options may have felt incomplete]<div class="quote-attr">— User 175</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- L-Q5 -->
+  <div class="question-block">
+    <div class="question-header">
+      <div class="question-meta">
+        <span class="q-tag lang">Language Q5</span>
+        <span class="q-category">Activity Suggestion — Phonological</span>
+      </div>
+      <div class="question-text">My 20 children are at story level! What task should I give them during sound-related (phonological) activity?</div>
+    </div>
+    <div class="vote-bar">
+      <div class="vote-item"><span class="vote-label">Option 1:</span><span class="vote-pill opt1 vote-winner">6 votes ★</span></div>
+      <div class="vote-item"><span class="vote-label">Option 2:</span><span class="vote-pill opt2">1 vote</span></div>
+    </div>
+    <div class="option-themes">
+      <div class="option-label">Option 1 — Strong winner: Complex word tasks for story-level children</div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Story-level children should do phonology through word formation and sentence/paragraph writing</span><span class="n-badge">n=4</span></div>
+        <div class="mini-quote gold">"Story-level children know many big words, can write paragraphs — in phonology we can ask them to write words with 10+ letters or make sentences."<div class="quote-attr">— User 211</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 211</span>इसमें जो हम देंगे वो फर्स्ट वाला क्योंकि बच्चे जो है अगर कहानी स्तर पे है। सब वो बड़े सारे शब्द उनको आते हैं हीरो पे अनुच्छेद भी लिखते हैं। हम उनको कहानी में दशम या उससे ज्यादा भी शब्द लिखने के लिए बोल सकते हैं या फिर वाक्य भी बनवा सकते हैं।</div></div>
+        <div class="mini-quote gold">"If a word or topic is given, these children can easily write a story on it — this is appropriate for this day."<div class="quote-attr">— User 223</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 223</span>मैंने ये ऑप्शन इसलिए चूस किया है इस दिन जो मेरे क्लास के पैरा स्टोरी के बच्चे जो बच्चे हैं वो इनको अगर कोई अलफाज़ दिया जाए तो वो उस अलफाज़ पर आराम से कहानी लिख सकते हैं।</div></div>
+      </div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Matra (vowel signs) confusion is common even at story level — should be addressed</span><span class="n-badge">n=2</span></div>
+        <div class="mini-quote gold">"I'll give matras — there's a lot of confusion between ā and aum sounds. I'll address that."<div class="quote-attr">— User 176</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 176</span>अगर मेरा मेरे बच्चे 20 बच्चे कहानी स्तर पे हैं और उनको फोनेलोजिकल वही दीवानी संबंधित गतिविधियों। तो मैं उनको जिसे आपने बताया की मात्रा दूंगी, बिलकुल मैं उनको मात्रा दूंगी, कोई भी जैसे ए और एम ही बहुत ज्यादा अंतर है बच्चों में। उसी की थोड़ी कैन्फ़्यूज़न रहती है तो मैं उनको ये दो मात्राएं दूंगी।</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- L-Q6 -->
+  <div class="question-block">
+    <div class="question-header">
+      <div class="question-meta">
+        <span class="q-tag lang">Language Q6</span>
+        <span class="q-category">Story Activity / Engagement</span>
+      </div>
+      <div class="question-text">How do I run Story Activity such that all children participate?</div>
+    </div>
+    <div class="vote-bar">
+      <div class="vote-item"><span class="vote-label">Option 2:</span><span class="vote-pill opt2 vote-winner">6 votes ★</span></div>
+      <div class="vote-item"><span class="vote-label">Option 1:</span><span class="vote-pill opt1">3 votes</span></div>
+    </div>
+    <div class="option-themes">
+      <div class="option-label">Option 2 — Winner: Picture-based discussion and expressive storytelling</div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Show picture, discuss event with whole class, then individual levels add their response</span><span class="n-badge">n=4</span></div>
+        <div class="mini-quote gold">"Show picture, discuss the incident with the whole class — children learn better when they see first."<div class="quote-attr">— User 176</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 176</span>मेरे अकॉर्डिंग बच्चों को हमें कहानी दिखानी चाहिए, चित्र दिखाना चाहिए फिर उसपे बातचीत करना चाहिए उस घटना पे पूरी क्लास से क्योंकि जो बच्चे हैं वो पहले देख कर ज्यादा अच्छा बोल सकते हैं एस कंपेर्ड टु किसी टॉपिक के ऊपर बात करना।</div></div>
+        <div class="mini-quote gold">"Tell the story with expressions first, children just listen. Then ask comprehension questions. Then story-related activities."<div class="quote-attr">— User 204</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 204</span>इसमें सेकंड वाला ऑप्शन मुझे ठीक लग रहा है क्योंकि जैसे हम क्लास में भी करते हैं स्टोरी की अक्टिविटीज की, हम पहले बच्चों को कहानी हाव भाव के साथ सुनाता है और बच्चे सिर्फ सुनते हैं, फिर कहानी से संबंधित प्रश्न पूछते हैं और उसके बाद हम पढ़ते हैं और बच्चे के रंगुली लगाते हैं।</div></div>
+      </div>
+      <div class="option-label">Option 1 — What supporters valued</div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Role play ensures all levels (Letter, Word, Para, Story) are included</span><span class="n-badge">n=2</span></div>
+        <div class="mini-quote gold">"Role play from the story — first organize, then all children participate including observers, letter-level, word-level, para-story-level."<div class="quote-attr">— User 207</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 207</span>ये ऐक्टिविटी अच्छी लगी क्योंकि अगर हम कोई भी रोल प्ले करवा रहे हैं, कहानी से तो पहले उनको ऑरेंज कर रहे हैं की आपको ये कहानी रोल प्ले करना है। उसके बाद सभी बच्चों का इसमें प्रतिभाग भी है कि देखने वाले बच्चे भी प्रतिभाग करेंगे। लेटर वाले भी, वर्ड वाले, पैरा स्टोरी वाले भी।</div></div>
+      </div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Improvement: Response should address specifically how Beginner-level children are included in story work</span><span class="n-badge">n=3</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- L-Q7 -->
+  <div class="question-block">
+    <div class="question-header">
+      <div class="question-meta">
+        <span class="q-tag lang">Language Q7</span>
+        <span class="q-category">Activity Suggestion — Story</span>
+      </div>
+      <div class="question-text">I am on Day 15. What story-related activity should I do now?</div>
+    </div>
+    <div class="vote-bar">
+      <div class="vote-item"><span class="vote-label">Option 2:</span><span class="vote-pill opt2 vote-winner">7 votes ★</span></div>
+      <div class="vote-item"><span class="vote-label">Option 1:</span><span class="vote-pill opt1">5 votes</span></div>
+    </div>
+    <div class="option-themes">
+      <div class="option-label">Option 2 — Winner: Role play, deep questions, Mind Map, compare stories</div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Day 15 story should involve analysis and creativity, not just reading</span><span class="n-badge">n=5</span></div>
+        <div class="mini-quote gold">"By Day 15, children read well. Now: role play, ask deep questions, Mind Map, compare two stories. This is all very beneficial."<div class="quote-attr">— User 179</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 179</span>अगर हम स्टोरी में क्लास में ऐसे ऐक्टिविटी कराएंगे जैसे इन्होंने बताया कि हम पहले नाटक रूपी करवाएं फिर उसके बाद गहरी सोच में सवाल पूछें। फिर मैएंड मैप पे कराएं, फिर तुलना कराएं। दो कहानियों में — ये हमारे लिए बहुत ज्यादा बेनिफिट होगा, बहुत अच्छा होगा।</div></div>
+        <div class="mini-quote gold">"Day 15 — questions should no longer be factual but should be those that go beyond the story. Yes, they can go outside the story too."<div class="quote-attr">— User 205</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 205</span>डे 15 के अनुसार। यह एप्रियट है क्योंकि बच्चे। ज्यादातर कहानी पढ़ रहे हैं और। अब बारी है कि हम बच्चों को अलग अलग चीजों की ओर ले जाए जैसे सवाल बेसिक ना हो करके हम प्रश्न कुछ अच्छे पूछें, तथ्यात्मक ना हो करके वो। हाँ कहानी से बाहर हो सकते हैं और नाटक के रूप में भी इसको करवाया जा सकता है।</div></div>
+      </div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Improve: Option 1 felt like earlier-day work — was seen as "regressing"</span><span class="n-badge">n=3</span></div>
+        <div class="mini-quote red">"By Day 15, when children have moved ahead in story, they need something different so their interest grows and creative knowledge builds."<div class="quote-attr">— User 226 (on why Op 2 was better)</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 226</span>कहानी में बच्चे जब आगे निकल चूके होते हैं, ये कहानी की पूरी समझ जब आ चुकी होती है। तो उनको कुछ डिफरेंट करने की जरूरत होती है ताकि उनका इन्ट्रेस्ट कहानी के रिलेटेड और बड़े और क्रिएटिव नॉलेज तैयार करने के लिए उनके अंदर वो सलाहियत पैदा हो सके और वो कहानी जो है खुद आत्मादी से बना सके।</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- L-Q8 -->
+  <div class="question-block">
+    <div class="question-header">
+      <div class="question-meta">
+        <span class="q-tag lang">Language Q8</span>
+        <span class="q-category">Activity Suggestion — Phonological</span>
+      </div>
+      <div class="question-text">I am on Day 20. What should I do now in Phonological (awareness)?</div>
+    </div>
+    <div class="vote-bar">
+      <div class="vote-item"><span class="vote-label">Option 2:</span><span class="vote-pill opt2 vote-winner">8 votes ★</span></div>
+      <div class="vote-item"><span class="vote-label">Option 1:</span><span class="vote-pill opt1">2 votes</span></div>
+    </div>
+    <div class="option-themes">
+      <div class="option-label">Option 2 — Strong winner: Complex word formation, sound identification, writing</div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Day 20 children (mostly Para/Story level) are ready for complex words and sentence/story writing</span><span class="n-badge">n=6</span></div>
+        <div class="mini-quote gold">"Most children are at Para/Story level — so making complex words, sound identification, varna-mel (letter-sound matching), and writing activities are appropriate."<div class="quote-attr">— User 200</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 200</span>क्योंकि ज्यादातर बच्चे कहानियों और पैराग्राफर स्तर पर हैं तो इसलिए उन बच्चों के साथ जटिल शब्द बनवाना, आवाज़ पहचान, वर्ण, मेल, खेल और लेखन संबंधित गतिविधियों कराने से उनकी कहानी पढ़ने का प्रवाह में वृद्धि होगी। इसलिए ये गतिविधि सही रहेंगी।</div></div>
+        <div class="mini-quote gold">"By Day 20, children are familiar with the 12-khari. Give them complex words to make — from words they'll make sentences, from sentences they'll make stories."<div class="quote-attr">— User 220</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 220</span>इसमें ऑप्शन भी ठीक रहेगा क्योंकि डे 20 में बच्चे 12 खड़ी से अच्छी तरह परिचित होते हैं तो हमें उनको जटिल शब्द बनवाने के लिए देने हैं। बच्चे शब्द शब्दों से वाक्या बनाएंगे और वाक्य से कहानी बनाएंगे और अपनी लेखन में गलतियों को सुधारेंगे।</div></div>
+      </div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Some instructors note phonological may be skippable at Para/Story level</span><span class="n-badge">n=2</span></div>
+        <div class="mini-quote gold">"If children are mostly at Para and Story level, these phonological tasks can be skipped. But if we must choose — Option B is correct."<div class="quote-attr">— User 213</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 213</span>मैं दे दी हूँ और यदि मेरे बच्चे ज्यादातर पैराग्राफ और स्टोरी पर हैं तो ये भी इसका होमोलॉजिकल को स्किप कर देते हैं। लेकिन अगर एओबी दोनों में सेलेक्ट करना है तो मैं बीके सेलेक्ट करूँगी जिससे की जटिल शब्द बनवाने और खेल वगैरह करवाएंगे।</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- L-Q9 -->
+  <div class="question-block">
+    <div class="question-header">
+      <div class="question-meta">
+        <span class="q-tag lang">Language Q9</span>
+        <span class="q-category">Lesson Planning</span>
+      </div>
+      <div class="question-text">I am on Day 20. What should I do now in Language?</div>
+    </div>
+    <div class="vote-bar">
+      <div class="vote-item"><span class="vote-label">Option 2:</span><span class="vote-pill opt2 vote-winner">7 votes ★</span></div>
+      <div class="vote-item"><span class="vote-label">Option 1:</span><span class="vote-pill opt1">5 votes</span></div>
+    </div>
+    <div class="option-themes">
+      <div class="option-label">Option 2 — Winner: Role play, Mind Map, 12-khari, complex words, dialogue writing</div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">By Day 20, language work should deepen thinking and confidence</span><span class="n-badge">n=4</span></div>
+        <div class="mini-quote gold">"By Day 20, children's thinking and understanding is very strong. Their confidence is also high. We can ask them to write poems, dialogues, and include complex words in word-chain games."<div class="quote-attr">— User 211</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 211</span>इसमें बच्चों की जो सोच और समझ है ना वो बहुत ही मजबूत हो जाती है 20 के दिन पे उनका कॉन्फिडेंस लेवल भी होता है तो जिसमें हम जो है कुछ उनको संवाद वगैरह लिखने के लिए, कविताएं लिखवा सकते हैं, संवाद लिखने में और 12 खड़ी में बड़े और जटिल शब्द शामिल कर सकते हैं।</div></div>
+        <div class="mini-quote gold">"By Day 20, children have learned a lot — now we need to go deeper. Reading Para-story level, role play to advance their thinking."<div class="quote-attr">— User 204</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 204</span>मुझे लगता है कि सेकंड वाला ऑप्शन बेटर है। क्योंकि उसमें ज्यादातर बीसवां दिन है और ज्यादातर बच्चे जो हैं वो भाषा की हिंदी वो पढ़ने लग गए हैं तो मुझे लगता है कि इसमें जो उनकी समझ है और जो सोच है उसको आगे बढ़ाने की जरूरत है जैसे रोल प्ले में मतलब रोल प्ले करके उनका जो रोल प्ले है उसका संवाद लिखना, उसका नाटक करके दिखाना।</div></div>
+      </div>
+      <div class="option-label">Option 1 — What supporters liked</div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Structured domain-wise approach still valued for lesson planning queries</span><span class="n-badge">n=3</span></div>
+        <div class="mini-quote gold">"By Day 20, most children are at Para and Story level. They can read everything well. For phonology and writing — deeper work."<div class="quote-attr">— User 225</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 225</span>मैंने ए ऑप्शन इसलिए चूस किया कि बीसवें दिन जो है मेरे बच्चे जो है मैक्सिमम बच्चे जो है पैरा और स्टोरी लेवल के थे और वो हर चीज़ को जो है अच्छी तरह से पढ़ सकते थे और समझ सकते थे।</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- L-Q10 -->
+  <div class="question-block">
+    <div class="question-header">
+      <div class="question-meta">
+        <span class="q-tag lang">Language Q10</span>
+        <span class="q-category">Activity Suggestion — Mind Map</span>
+      </div>
+      <div class="question-text">I am on Day 25. What should I do now in Mind Map?</div>
+    </div>
+    <div class="vote-bar">
+      <div class="vote-item"><span class="vote-label">Option 1 only:</span><span class="vote-pill opt1 vote-winner">5 votes ★ (uncontested)</span></div>
+    </div>
+    <div class="option-themes">
+      <div class="option-label">Option 1 — Unanimously preferred: Preferred topic + level-wise writing task</div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Children's preferred topic drives richer mind maps at Day 25</span><span class="n-badge">n=3</span></div>
+        <div class="mini-quote gold">"If we give children their favorite topic — more thoughts come, they tell more, write more, and they categorize very well."<div class="quote-attr">— User 207</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 207</span>मुझे ये अक्टिविटी अच्छी लगी की अगर हम बच्चों को कोई भी उनके मनपसंद टॉपिक देते हैं तो बच्चों के थॉट ज्यादा आते हैं और ज्यादा से ज्यादा बता पाते हैं और लिख भी पाते हैं। और फिर उसमें वो कैटेगरी केटेगराइज भी बहुत अच्छे से करते हैं।</div></div>
+        <div class="mini-quote gold">"By Day 25, open their minds — children should think as much as possible. More and more words in their Mind Map."<div class="quote-attr">— User 177</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 177</span>डे 25 के लिए हमें ऐसा टॉपिक लेना चाहिए। जैसे की एनवायरनमेंट पे बच्चों के साथ बात कर सकते हैं। और मेरी दिनचर्या। ऐसे टॉपिक लेने चाहिए जिससे बच्चों की अब ज्यादा से ज्यादा वो वोकैब बिल्ड हो सके। मतलब उनके जहन को जितना ज्यादा हो सके, खुल खोलने की कोशिश करनी है कि बच्चा ज्यादा से ज्यादा सोचे। और ज्यादा से ज्यादा वर्ड्स उसके मैएंड में आ सके।</div></div>
+      </div>
+      <div class="mini-theme">
+        <div class="mini-theme-header"><span class="mini-theme-name">Level-wise writing from the mind map (sentences for Word, paragraphs for Para level)</span><span class="n-badge">n=2</span></div>
+        <div class="mini-quote gold">"Level-wise: Word-level children write sentences, Para-level children write paragraphs, Story-level children write full stories."<div class="quote-attr">— User 224</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 224</span>मैंने ऑप्शन ए इसलिए चूस किया कि बच्चों की लेवल के हिसाब से अगर बच्चों को काम दिया जाए जैसे वार्ड वाले बच्चों को अगर जुमले लिखने के लिए बोला, पैरा लेवल बच्चों को पैराग्राफ लिखने के लिए और स्टोरी लेवल के बच्चे अगर स्टोरी लिखने के लिए बोले — सभी बच्चे इस दिन में आराम से कर सकते हैं।</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4 — STRATEGIC ANALYSIS -->
+  <div class="section-break"></div>
+  <div class="section-header">
+    <div class="section-eyebrow">Section 4</div>
+    <div class="section-title">Where Both Responses Were Still Egregiously Bad</div>
+    <div class="section-desc">Instances where instructor feedback reveals missing context that caused both options to fall short — pointing to what the prompt is still missing.</div>
+  </div>
+
+  <div class="bad-card">
+    <div class="bad-card-title">🔴 MATHS Q4 — "Day 15, what to do in Maths?" — Missing: What if children haven't progressed as expected?</div>
+    <div class="bad-card-text">Both options assumed children are on track. No response addressed remediation for children who are still stuck at 0-9 level by Day 15. Instructors who teach in lower-resource contexts found both responses idealistic.<br><br><em>"By Day 15 the camp is almost done. Most children should be at 10-99. Calendar and market-based problems are best for addition and subtraction at this stage."</em> — User 204 (suggesting an implicit assumption the bot missed)
+    <div class="hindi-verbatim" style="margin-top:10px;"><span class="hindi-label">Verbatim — User 204</span>क्योंकि हमारा कैंप का 15 दिन है और ज्यादातर बच्चे जो है वो 10 से 99 पे है तो मुझे लगता है कि कैलेंडर और बाजार जो है वो एक बेस्ट ऑप्शन होता है ताकि वो बच्चे जो हैं जोड़ और घटाना, कैलेंडर या बाजार से जो हम गणित है, बातचीत करते हैं, उससे सीख जाते हैं।</div></div>
+  </div>
+
+  <div class="bad-card">
+    <div class="bad-card-title">🔴 MATHS Q1 — Mixed class Day 20 Activity — Missing: What does the teacher DO while children work in separate groups?</div>
+    <div class="bad-card-text">Both options described what children should do, but neither specified teacher movement, monitoring, or how to handle a child who gets stuck mid-activity. Several instructors noted this as a practical gap.<br><br><em>"All children do the activity together, and you walk around and help as needed."</em> — This quote (from Option 2's actual response) was the closest to addressing it, but was seen as vague.</div>
+  </div>
+
+  <div class="bad-card">
+    <div class="bad-card-title">🔴 LANGUAGE Q3 — Day 12 Oral Discussion, Mixed Levels — Missing: How do Beginners participate in oral discussion designed for higher levels?</div>
+    <div class="bad-card-text">Both responses suggested topics but didn't specify scaffolding for Beginner-level children (who may only know a few words). The 6-5 split suggests real ambiguity — no response resolved the Beginner participation problem.<br><br><em>"Every child tries to speak — if a sentence is given, even those who can't, try."</em> — User 228's description of what should happen, but both responses left this implicit.</div>
+  </div>
+
+  <div class="bad-card">
+    <div class="bad-card-title">🔴 LANGUAGE Q6 — "How to run Story Activity so all children participate?" — Missing: What 'participation' means for each level</div>
+    <div class="bad-card-text">Instructors voted 6–3 for Option 2, but several critiques of both options noted that "participation" was never operationalized. What does a Beginner do during role play? What does a Story-level child do during picture discussion?<br><br><em>"Maybe picture discussion works, or something else — so that the child's creativity doesn't die."</em> — User 226, expressing dissatisfaction with both options' failure to respect child agency.</div>
+  </div>
+
+  <div class="bad-card">
+    <div class="bad-card-title">🔴 MATHS Q8 — Day 18, Subtraction Group Small Activity — Missing: Level-within-subtraction differentiation</div>
+    <div class="bad-card-text">Both options treated "subtraction-level children" as a monolithic group. Instructors know that some subtraction-level children do single-digit, others do double-digit with and without borrowing. The split vote (4-4) reflects this unresolved gap.</div>
+  </div>
+
+  <!-- SECTION 5 -->
+  <div class="section-break"></div>
+  <div class="section-header">
+    <div class="section-eyebrow">Section 5</div>
+    <div class="section-title">Option 1 vs. Option 2 — When Context Won, When Brevity Won</div>
+    <div class="section-desc">Pattern analysis of which option won and why — identifying predictors for when principles and progression add value vs. when they create noise.</div>
+  </div>
+
+  <div class="opt-compare">
+    <div class="opt-col">
+      <div class="opt-col-head">Option 1 (Principle + Progression) Won When...</div>
+      <div class="opt-pro">The question involved <strong>designing activity structure</strong> for a mixed or multi-level class (Q5, Q6, Q7 Maths; Q2, Q5 Language)</div>
+      <div class="opt-pro">The question was about <strong>introducing a new domain</strong> or concept progression (Maths Q2, Q3; Language Q2)</div>
+      <div class="opt-pro">The question was at <strong>mid-journey days (10–18)</strong> when the "why" behind sequencing matters</div>
+      <div class="opt-pro">The instructor asked an <strong>open-ended design question</strong> ("how do I design…", "what should I do in Math Talk") rather than content request</div>
+      <div class="opt-con">Principle-first framing felt unnecessary when instructors already know the principle</div>
+    </div>
+    <div class="opt-col">
+      <div class="opt-col-head">Option 2 (Manual / Concise) Won When...</div>
+      <div class="opt-pro">The day number was <strong>late (Day 20+)</strong> and the instructor felt they knew the context — they wanted specific activities, not rationale</div>
+      <div class="opt-pro">The question was <strong>domain-specific</strong> and the instructor was already experienced in that domain (Language Q7, Q8, Q9)</div>
+      <div class="opt-pro">Concrete, immediate <strong>action-steps were needed</strong> — e.g., "what story activity to do on Day 15" — instructors wanted a menu, not a framework</div>
+      <div class="opt-pro">The Option 1 response felt like it was <strong>repeating what they already know</strong> or conflating two activities</div>
+      <div class="opt-con">Often lacked the "why" when the instructor might have needed it for an unusual edge case</div>
+    </div>
+  </div>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Question</th>
+        <th>Subject</th>
+        <th>Winner</th>
+        <th>Vote</th>
+        <th>Core reason</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="winner-row"><td>Mixed-class Number Knowledge design</td><td>Maths</td><td>Option 1 <span class="win-tag">OPT1</span></td><td>13–0</td><td>Principle of level-differentiation needed; most complex query</td></tr>
+      <tr class="winner-row"><td>Day 20 Math Talk</td><td>Maths</td><td>Option 1 <span class="win-tag">OPT1</span></td><td>8–3</td><td>Picture + estimation approach clearly explained the "why"</td></tr>
+      <tr class="winner-row"><td>Day 20 Word Problems</td><td>Maths</td><td>Option 1 <span class="win-tag">OPT1</span></td><td>8–2</td><td>Big→small→individual progression was made explicit</td></tr>
+      <tr><td>Day 20 Phonological</td><td>Language</td><td>Option 2</td><td>8–2</td><td>Instructors knew context; wanted specific activities only</td></tr>
+      <tr><td>Day 15 Story</td><td>Language</td><td>Option 2</td><td>7–5</td><td>Role play + deep questions resonated; Option 1 felt regressive</td></tr>
+      <tr><td>Day 20 Language</td><td>Language</td><td>Option 2</td><td>7–5</td><td>Practical activities (role play, Mind Map, 12-khari) listed clearly</td></tr>
+      <tr><td>Day 10 Independent Writing Topic</td><td>Language</td><td>Option 2</td><td>4–2</td><td>Familiar topic > abstract topic; Option 1 conflated Mind Map</td></tr>
+      <tr><td>Day 15 Math</td><td>Maths</td><td>Option 2</td><td>6–5</td><td>Marginal; Option 2 felt more grounded in real classroom context</td></tr>
+      <tr><td>Oral Discussion Day 12</td><td>Language</td><td>Option 2</td><td>6–5</td><td>Everyday topics more practical; close race</td></tr>
+      <tr><td>Story Activity for All Children</td><td>Language</td><td>Option 2</td><td>6–3</td><td>Expressive storytelling + pictures was more concrete</td></tr>
+    </tbody>
+  </table>
+
+  <!-- SECTION 6 — MENTAL MODEL -->
+  <div class="section-break"></div>
+  <div class="section-header">
+    <div class="section-eyebrow">Section 6</div>
+    <div class="section-title">Instructor Mental Model for LLM-as-Judge</div>
+    <div class="section-desc">Synthesized from 154 feedback entries — an initial mental model of how these instructors evaluate a "good" bot response, which should inform the design of an LLM-based instructor judge.</div>
+  </div>
+
+  <div class="mental-model">
+    <h3>The Instructor's Six Evaluative Lenses</h3>
+    <div class="mental-model-sub">These are the implicit criteria instructors apply when judging a response as "good" or "not good enough" — extracted from their verbatim feedback patterns.</div>
+    <div class="principle-grid">
+      <div class="principle-card">
+        <div class="principle-number">01</div>
+        <div class="principle-title">Level-Differentiation Completeness</div>
+        <div class="principle-desc">Does the response give distinct tasks for each child-level present in the query? A response that treats all children the same is automatically suspect. The judge should check: are there explicit activities for each level named in the question?</div>
+        <div class="principle-quote">"Each group has individual tasks which is why children will easily understand and complete it." — User 203</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 203</span>प्रत्येक ग्रुप के लिए इंडीविजुअल टास्क है। इसमें भी।</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-number">02</div>
+        <div class="principle-title">Day-Number Appropriateness</div>
+        <div class="principle-desc">Does the response respect the developmental stage implied by the day number? Day 1–10 = concrete/basic; Day 15 = pivot point; Day 20+ = advanced work expected. A response recommending tilli-bundle on Day 20 without explanation should score low.</div>
+        <div class="principle-quote">"By Day 20, we don't need tilli-bundle for word problems — children should now solve directly." — User 205</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 205</span>डे 20 के अनुसार अब हमें बच्चों को तिली बंडल से शाब्दिक सवाल करवाने की आवश्यकता नहीं होनी चाहिए क्योंकि शाब्दिक सवाल का कॉन्सेप्ट ऑलरेडी उन बच्चों को समझ आ गया होगा।</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-number">03</div>
+        <div class="principle-title">Big→Small→Individual Scaffolding</div>
+        <div class="principle-desc">Does the response follow the expected lesson flow? Instructors implicitly expect: (1) big group introduction, (2) level-wise small group practice, (3) individual work. A response that jumps directly to individual tasks without this structure is seen as unrealistic.</div>
+        <div class="principle-quote">"First understand in big group, then give level-wise tasks in small groups, then individual." — User 219</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 219</span>बिग ग्रुप में स्टोरी से वर्ल्ड प्रॉब्लम समझौंगी फिर स्मॉल ग्रुप में लेवल के हिसाब से वर्ल्ड प्रॉब्लम का टास्क दूंगी। जिन बच्चों को समझ नहीं आएगी उनको मैं खुद हेल्प करूँगी।</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-number">04</div>
+        <div class="principle-title">Concrete Material Specificity</div>
+        <div class="principle-desc">Does the response name specific TLM (teaching-learning materials), games, or activities? Abstract principles without concrete examples lose trust. For Maths: tilli-bundle, number cards, number chart, calendar, market. For Language: picture cards, role play, 12-khari.</div>
+        <div class="principle-quote">"Through tilli-bundle, children easily learn and connect — asking how many bundles in 45 is very good place value work." — User 175</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 175</span>मुझे ये वाले ऑप्शन जिसमें हम बच्चों को असेंडिंग ऑर्डर है या पैटर्न्स है, स्मॉल ग्रुप्स में करवातें हैं। तीली बंडल संख्याएं भी बनाने तो जैसे हम बात पूछते हैं 45 में कितने बंडल कितनी तीली आई है — प्लेस वैल्यू हर एक जैसे हमने डिजिट लिखे तो उसपे प्लेस वैल्यू किसका क्या है — ये बहुत अच्छा है।</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-number">05</div>
+        <div class="principle-title">Participation Inclusivity</div>
+        <div class="principle-desc">Can ALL children participate, including the lowest-level ones? Especially for Language, responses are judged on whether Beginner/Letter-level children are explicitly included — not just Para/Story level. A response that only works for advanced children is marked down.</div>
+        <div class="principle-quote">"All level children are together — when we say a sentence, every child tries to speak." — User 228</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 228</span>ये आंसर मैंने इसलिए चूस किया क्योंकि इसमें सभी लेवल के बच्चे हैं एक साथ होते हैं वो जब ये हम एक कोई वाक्य बोलेंगे तो हर बच्चा कोशिश करेगा बोलने की।</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-number">06</div>
+        <div class="principle-title">Beyond-the-Obvious Novelty</div>
+        <div class="principle-desc">Does the response tell instructors something they don't already know? Instructors are most critical when both options feel like "what we're already doing." The best responses suggest next steps or introduce a technique/framing the instructor hadn't considered.</div>
+        <div class="principle-quote">"Everything in this seems the same to me — both options look the same. This is the most difficult option." — User 226 (expressing frustration)</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 226</span>इस मैं मुझे जो है वो सारी चीजें जो है बराबर दिखाई देती है। इसलिए मुझे मेरा मानना है कि ये सबसे कष्ट ऑप्शन है।</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="analysis-grid">
+    <div class="analysis-card">
+      <div class="analysis-card-head green">
+        <div class="analysis-card-title">High-Quality Response Signals</div>
+        <div class="analysis-card-subtitle">What makes instructors say "this is exactly right"</div>
+      </div>
+      <div class="analysis-card-body">
+        <div class="analysis-item">
+          <div class="analysis-item-label">Levels are named and given distinct tasks</div>
+          <div class="analysis-item-text">Each child group (0-9, 10-99, addition, subtraction, Beginner, Letter, Word, Para, Story) receives a specific activity.</div>
+        </div>
+        <div class="analysis-item">
+          <div class="analysis-item-label">Day-appropriate materials are specified</div>
+          <div class="analysis-item-text">TLM matches the day — concrete (tilli) for early days, abstract (word problems without support) for later days.</div>
+        </div>
+        <div class="analysis-item">
+          <div class="analysis-item-label">Teacher role is specified</div>
+          <div class="analysis-item-text">Response says what the teacher does while groups work — who to observe, when to intervene, how to rotate.</div>
+        </div>
+        <div class="analysis-item">
+          <div class="analysis-item-label">Progression is embedded in the answer</div>
+          <div class="analysis-item-text">The answer scaffolds: start simple, go complex. "First without borrow, then with borrow" is an example instructors praised.</div>
+          <div class="analysis-quote">"Starting with without-borrow questions, then borrow questions, then comparison — this progression is the right way." — User 177</div>
+        <div class="hindi-verbatim"><span class="hindi-label">Verbatim — User 177</span>इसमें हम बच्चों के साथ स्टार्टिंग ए डेज़ में विदाउट बार रोज़ वाले क्वेश्चन फिर बारो वाले क्वेश्चन करते हैं, ठीक है, फिर तुलना वाले क्वेश्चन करते हैं। मतलब फिर कंपैरिजन वाले भी क्वेश्चन करते हैं।</div>
+        </div>
+      </div>
+    </div>
+    <div class="analysis-card">
+      <div class="analysis-card-head red">
+        <div class="analysis-card-title">Low-Quality Response Signals</div>
+        <div class="analysis-card-subtitle">What makes instructors say "this isn't helpful"</div>
+      </div>
+      <div class="analysis-card-body">
+        <div class="analysis-item">
+          <div class="analysis-item-label">Generic advice without level specificity</div>
+          <div class="analysis-item-text">Responses that say "give appropriate activities to each child" without naming what those activities are.</div>
+        </div>
+        <div class="analysis-item">
+          <div class="analysis-item-label">Tilli-bundle recommended at Day 20+</div>
+          <div class="analysis-item-text">Recommending beginner-stage materials at advanced-stage days without explanation reads as "not knowing the context."</div>
+        </div>
+        <div class="analysis-item">
+          <div class="analysis-item-label">Response assumes ideal conditions</div>
+          <div class="analysis-item-text">No acknowledgment that some children may still be behind — responses feel out of touch with mixed-ability realities.</div>
+        </div>
+        <div class="analysis-item">
+          <div class="analysis-item-label">Repetition of principles already known</div>
+          <div class="analysis-item-text">Explaining "why differentiation matters" to instructors who already differentiate — wastes response space and signals the bot doesn't know who it's talking to.</div>
+          <div class="analysis-quote">"I chose this option because it already explains what to do — not just why." — User 223</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:var(--accent-gold-light); border:1px solid var(--accent-gold); padding:28px 32px; margin-bottom:40px;">
+    <div style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--accent-gold);margin-bottom:12px;">Recommended LLM-as-Judge Rubric (v0.1)</div>
+    <table class="data-table" style="background:white;margin-bottom:0;">
+      <thead>
+        <tr>
+          <th>Criterion</th>
+          <th>Weight</th>
+          <th>0 — Missing</th>
+          <th>1 — Partial</th>
+          <th>2 — Full</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Level-differentiation</strong></td><td>25%</td><td>One-size response</td><td>Mentions levels but no distinct tasks</td><td>Each level has distinct, named activity</td></tr>
+        <tr><td><strong>Day-appropriateness</strong></td><td>20%</td><td>Wrong materials for day</td><td>Vague reference to progression</td><td>Materials explicitly matched to day number</td></tr>
+        <tr><td><strong>Lesson flow structure</strong></td><td>20%</td><td>No structure specified</td><td>Some grouping mentioned</td><td>Big → Small → Individual explicitly given</td></tr>
+        <tr><td><strong>Material specificity</strong></td><td>20%</td><td>No TLM or activity named</td><td>Activity type named (e.g., "game")</td><td>Specific TLM named (tilli-bundle, picture cards, etc.)</td></tr>
+        <tr><td><strong>Participation inclusivity</strong></td><td>15%</td><td>Only addresses high-level children</td><td>Mentions low-level children</td><td>Every level has a participation mode</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-text">Internal Report · Nudge Experiment Qualitative Analysis · 28 Instructors · 154 Feedback Entries</div>
+  <div class="footer-text">Maths (15 rows) + Language (19 rows) · Options: Manual Only vs. Principle + Progression</div>
+</div>
+
+</body>
+</html>
